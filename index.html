@@ -90,29 +90,29 @@ h1{margin:0 0 8px 0;font-size:1.4rem}
 </div>
 
 <script>
-const month=4;
-const pct=(c,m)=>Math.min(100,(c/m)*100);
-const proj=(c,m)=>Math.min(100,((c/month)*12)/m*100);
-const sem=p=>p>=100?{t:'Verde',c:'verde'}:p>=70?{t:'Amarillo',c:'amarillo'}:{t:'Rojo',c:'rojo'};
-const norm=v=>(v||'').toString().trim().toLowerCase();
-const esc=s=>(s??'').toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const month = 4;
+const pct = (c,m) => Math.min(100, (c/m) * 100);
+const proj = (c,m) => Math.min(100, ((c/month) * 12) / m * 100);
+const sem = p => p >= 100 ? {t:'Verde', c:'verde'} : p >= 70 ? {t:'Amarillo', c:'amarillo'} : {t:'Rojo', c:'rojo'};
+const fold = (v) => (v || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+const esc = (s) => (s ?? '').toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
 // Base de ejemplo para que el tablero no arranque vacío
-const sampleActions=[
- {objective:'agenda de desregulación',kr:'reuniones mdr',type:'reunión institucional',topic:'tsh'},
- {objective:'agenda de desregulación',kr:'reuniones mdr',type:'reunión institucional',topic:'tsh'},
- {objective:'agenda de desregulación',kr:'reuniones mdr',type:'reunión institucional',topic:'data'},
- {objective:'agenda de desregulación',kr:'non papers',type:'documento técnico',topic:'reforma laboral / cvu'},
- {objective:'relacionamientos',kr:'relacionamientos exco',type:'evento/activación',topic:'inversores / funcionarios'},
- {objective:'advocacy',kr:'white papers',type:'contenido/posicionamiento',topic:'reforma laboral / fal'},
- {objective:'advocacy',kr:'alianzas',type:'alianza/articulación',topic:'cámaras / comisión aapp'},
- {objective:'cross colaboración',kr:'prensa',type:'alianza/articulación',topic:'reforma laboral / cvu'},
+const sampleActions = [
+  {objective:'agenda de desregulacion', kr:'Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)', type:'reunión institucional', topic:'tsh'},
+  {objective:'agenda de desregulacion', kr:'Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)', type:'reunión institucional', topic:'tsh'},
+  {objective:'agenda de desregulacion', kr:'Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)', type:'reunión institucional', topic:'data'},
+  {objective:'agenda de desregulacion', kr:'Distribución de non papers a Stakeholders sobre temas de impacto en la MdD (3/5)', type:'documento técnico', topic:'reforma laboral / cvu'},
+  {objective:'relacionamientos', kr:'Gestionar 6 relacionamientos del EXCO con figuras políticas/funcionarios.', type:'evento/activación', topic:'inversores / funcionarios'},
+  {objective:'advocacy', kr:'Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)', type:'contenido/posicionamiento', topic:'reforma laboral / fal'},
+  {objective:'advocacy', kr:'Alianza con Cámaras y Asoc. en la gestión de temas de MdD (2/3)', type:'alianza/articulación', topic:'cámaras / comisión aapp'},
+  {objective:'cross colaboración', kr:'Cross colaboration con prensa en (2/4) temas de MdD', type:'alianza/articulación', topic:'reforma laboral / cvu'}
 ];
 
-let actions=[...sampleActions];
+let actions = [...sampleActions];
 
 function parseExcelRows(rows){
-  const headers = rows[0].map(h => norm(h));
+  const headers = rows[0].map(h => fold(h));
   const idx = {
     fecha: headers.findIndex(h => h.includes('fecha')),
     actor: headers.findIndex(h => h.includes('actor')),
@@ -133,12 +133,12 @@ function parseExcelRows(rows){
       fecha: idx.fecha >= 0 ? r[idx.fecha] : '',
       actor: idx.actor >= 0 ? r[idx.actor] : '',
       nivel: idx.nivel >= 0 ? r[idx.nivel] : '',
-      objective: idx.objetivo >= 0 ? norm(r[idx.objetivo]) : '',
-      kr: idx.kr >= 0 ? norm(r[idx.kr]) : '',
-      type: idx.tipo >= 0 ? norm(r[idx.tipo]) : '',
-      state: idx.estado >= 0 ? norm(r[idx.estado]) : '',
-      impact: idx.impacto >= 0 ? norm(r[idx.impacto]) : '',
-      topic: idx.tema >= 0 ? norm(r[idx.tema]) : ''
+      objective: idx.objetivo >= 0 ? fold(r[idx.objetivo]) : '',
+      kr: idx.kr >= 0 ? String(r[idx.kr]) : '',
+      type: idx.tipo >= 0 ? fold(r[idx.tipo]) : '',
+      state: idx.estado >= 0 ? fold(r[idx.estado]) : '',
+      impact: idx.impacto >= 0 ? fold(r[idx.impacto]) : '',
+      topic: idx.tema >= 0 ? fold(r[idx.tema]) : ''
     });
   }
   return parsed;
@@ -166,9 +166,11 @@ document.getElementById('excelFile').addEventListener('change', async (e) => {
   loadWorkbook(buf);
 });
 
-function getRowsByObjective(keyword){ return actions.filter(a => norm(a.objective).includes(keyword)); }
-function getRowsByKR(keyword){ return actions.filter(a => norm(a.kr).includes(keyword)); }
-function getRowsByType(keyword){ return actions.filter(a => norm(a.type).includes(keyword)); }
+function findByKR(term){
+  const target = fold(term);
+  return actions.filter(a => fold(a.kr).includes(target));
+}
+
 function uniqueTopics(rows){ return [...new Set(rows.map(r => (r.topic || '').trim()).filter(Boolean))]; }
 function topicLabel(rows){
   const topics = uniqueTopics(rows);
@@ -180,28 +182,28 @@ function topicLabel(rows){
 
 function render(){
   const data = {
-    obj1:{meet:getRowsByKR('reuniones mdr').length, tsh:getRowsByKR('reuniones mdr').filter(a => norm(a.topic).includes('tsh')).length, max:12, papers:getRowsByKR('non papers').length, papersMax:5},
-    obj2:{rel:getRowsByKR('relacionamientos exco').length, max:6},
-    obj3:{blog:84000, blogMax:300000, wp:getRowsByKR('white papers').length, wpMax:5, ali:getRowsByKR('alianzas').length, aliMax:3},
-    obj4:{press:getRowsByKR('prensa').length, max:3},
-    obj5:{pp:getRowsByKR('reuniones clave').length, max:5}
+    obj1:{meet:findByKR('Cantidad de reuniones con impacto directo en Matriz de desregulación').length, tsh:findByKR('Cantidad de reuniones con impacto directo en Matriz de desregulación').filter(a => fold(a.topic).includes('tsh')).length, max:12, papers:findByKR('Distribución de non papers').length, papersMax:5},
+    obj2:{rel:findByKR('Gestionar 6 relacionamientos del EXCO').length, max:6},
+    obj3:{blog:84000, blogMax:300000, wp:findByKR('Realizar 3/5 white papers').length, wpMax:5, ali:findByKR('Alianza con Cámaras y Asoc.').length, aliMax:3},
+    obj4:{press:findByKR('Cross colaboration con prensa').length, max:3},
+    obj5:{pp:findByKR('Asegurar 5 reuniones con actores clave').length, max:5}
   };
 
-  const objectives=[
+  const objectives = [
     {t:'1. Agenda de desregulación', impact:'Alto impacto en ingresos y costos regulatorios', k:[
       {n:'Reuniones MdR', c:data.obj1.meet, m:data.obj1.max, extra:`TSH ${data.obj1.tsh}/${data.obj1.meet}`},
-      {n:'Non papers', c:data.obj1.papers, m:data.obj1.papersMax, extra:`Tema: ${topicLabel(getRowsByKR('non papers'))}`}
+      {n:'Non papers', c:data.obj1.papers, m:data.obj1.papersMax, extra:`Tema: ${topicLabel(findByKR('Distribución de non papers'))}`}
     ]},
     {t:'2. Relacionamientos', impact:'Alto impacto en acceso a decisores', k:[
       {n:'Relacionamientos EXCO', c:data.obj2.rel, m:data.obj2.max}
     ]},
     {t:'3. Advocacy', impact:'Impacto medio en posicionamiento y agenda pública', k:[
       {n:'Blog', c:data.obj3.blog, m:data.obj3.blogMax},
-      {n:'White papers', c:data.obj3.wp, m:data.obj3.wpMax, extra:`Tema: ${topicLabel(getRowsByKR('white papers'))}`},
-      {n:'Alianzas', c:data.obj3.ali, m:data.obj3.aliMax, extra:`Tema: ${topicLabel(getRowsByKR('alianzas'))}`}
+      {n:'White papers', c:data.obj3.wp, m:data.obj3.wpMax, extra:`Tema: ${topicLabel(findByKR('Realizar 3/5 white papers'))}`},
+      {n:'Alianzas', c:data.obj3.ali, m:data.obj3.aliMax, extra:`Tema: ${topicLabel(findByKR('Alianza con Cámaras y Asoc.'))}`}
     ]},
     {t:'4. Cross colaboración', impact:'Impacto medio en amplificación de agenda', k:[
-      {n:'Prensa', c:data.obj4.press, m:data.obj4.max, extra:`Tema: ${topicLabel(getRowsByKR('prensa'))}`}
+      {n:'Prensa', c:data.obj4.press, m:data.obj4.max, extra:`Tema: ${topicLabel(findByKR('Cross colaboration con prensa'))}`}
     ]},
     {t:'5. Public Policy', impact:'Impacto crítico en agenda regulatoria global', k:[
       {n:'Reuniones clave', c:data.obj5.pp, m:data.obj5.max}
