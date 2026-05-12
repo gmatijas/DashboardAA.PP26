@@ -1,1 +1,533 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Asuntos Públicos | AAPP26</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --santander-red:#ec0000;
+      --santander-red-dark:#c90000;
+      --bg:#f4f6f9;
+      --card:#ffffff;
+      --ink:#101828;
+      --muted:#667085;
+      --line:#e5e7eb;
+      --soft-red:#fff1f1;
+      --soft-gray:#f8fafc;
+      --green:#16a34a;
+      --amber:#f59e0b;
+      --blue:#2563eb;
+      --purple:#7c3aed;
+      --shadow:0 16px 42px rgba(16,24,40,.08);
+      --radius:22px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      background:linear-gradient(180deg,#fff 0,#f6f7fb 330px,var(--bg) 331px);
+      color:var(--ink);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .wrap { max-width:1440px; margin:0 auto; padding:26px; }
+    .hero {
+      position:relative; overflow:hidden;
+      border-radius:30px;
+      background:linear-gradient(135deg,#ec0000 0%,#b00000 58%,#690000 100%);
+      color:#fff; padding:30px 32px; box-shadow:var(--shadow);
+    }
+    .hero::after {
+      content:""; position:absolute; right:-120px; top:-160px; width:380px; height:380px;
+      border-radius:50%; background:rgba(255,255,255,.13);
+    }
+    .hero-grid { display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:end; position:relative; z-index:1; }
+    .eyebrow { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+    .tag { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; border-radius:999px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.22); font-size:13px; font-weight:700; }
+    .hero h1 { margin:0; font-size:34px; line-height:1.05; letter-spacing:-.6px; }
+    .hero p { margin:12px 0 0; color:rgba(255,255,255,.84); max-width:900px; font-size:15px; line-height:1.55; }
+    .hero-note { background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.22); border-radius:20px; padding:18px; backdrop-filter: blur(4px); }
+    .hero-note strong { display:block; font-size:14px; margin-bottom:8px; }
+    .hero-note div { font-size:13px; line-height:1.45; color:rgba(255,255,255,.86); }
 
+    .kpi-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin:20px 0; }
+    .kpi { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:0 10px 30px rgba(16,24,40,.055); min-height:138px; }
+    .kpi-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .icon { width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; border-radius:15px; font-size:22px; background:var(--soft-red); color:var(--santander-red); }
+    .kpi-title { color:var(--muted); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+    .kpi-value { margin-top:14px; font-size:31px; line-height:1; font-weight:900; letter-spacing:-.6px; }
+    .kpi-sub { margin-top:8px; color:var(--muted); font-size:13px; line-height:1.45; }
+
+    .section { margin-top:26px; }
+    .section-head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin:4px 0 14px; }
+    .section-title { margin:0; font-size:23px; letter-spacing:-.3px; display:flex; align-items:center; gap:10px; }
+    .section-desc { margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.48; max-width:980px; }
+    .small-note { color:var(--muted); font-size:12px; line-height:1.45; }
+
+    .objective-list { display:grid; gap:18px; }
+    .objective { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 12px 32px rgba(16,24,40,.055); overflow:hidden; }
+    .objective-head { display:grid; grid-template-columns:1fr auto; gap:18px; align-items:start; padding:20px 20px 16px; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fff,#fcfcfd); }
+    .objective-title { margin:0; font-size:19px; letter-spacing:-.2px; }
+    .objective-sub { margin-top:6px; color:var(--muted); font-size:13px; }
+    .objective-exp { margin-top:12px; color:#475467; font-size:13px; line-height:1.47; display:flex; gap:8px; align-items:flex-start; max-width:980px; }
+    .badge { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:8px 10px; border-radius:999px; background:var(--soft-red); color:var(--santander-red); font-weight:900; font-size:12px; white-space:nowrap; border:1px solid #ffd6d6; }
+    .rows-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:14px; padding:16px; }
+    .kr { border:1px solid var(--line); border-radius:18px; padding:15px; background:#fff; min-height:245px; display:flex; flex-direction:column; justify-content:space-between; }
+    .kr-top { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+    .kr-label { font-size:14px; font-weight:900; line-height:1.25; }
+    .kr-meta { margin-top:6px; color:var(--muted); font-size:12px; line-height:1.35; }
+    .status-chip { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:7px 9px; font-size:11px; font-weight:900; white-space:nowrap; }
+    .ok { background:#ecfdf3; color:#067647; border:1px solid #abefc6; }
+    .risk { background:#fffaeb; color:#b54708; border:1px solid #fedf89; }
+    .nodata { background:#f2f4f7; color:#475467; border:1px solid #d0d5dd; }
+    .metric-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:15px 0 12px; }
+    .metric-box { border-radius:15px; background:#f8fafc; border:1px solid #eef2f7; padding:12px; }
+    .metric-box strong { display:block; font-size:18px; letter-spacing:-.2px; }
+    .metric-box span { display:block; margin-top:4px; font-size:11px; color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+    .target-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; color:var(--muted); font-size:12px; font-weight:800; }
+    .bar-area { display:grid; gap:8px; }
+    .bar-label { display:flex; justify-content:space-between; color:#475467; font-size:11px; font-weight:800; }
+    .progress { height:11px; background:#f1f5f9; border-radius:999px; overflow:hidden; position:relative; border:1px solid #e2e8f0; }
+    .bar { height:100%; border-radius:999px; background:linear-gradient(90deg,var(--santander-red),#ff6b6b); width:0; }
+    .projected-bar { height:100%; border-radius:999px; background:repeating-linear-gradient(135deg,#1d4ed8 0,#1d4ed8 5px,#93c5fd 5px,#93c5fd 10px); opacity:.82; width:0; }
+    .gray { background:#cbd5e1 !important; }
+    .legend { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .legend span { display:inline-flex; align-items:center; gap:6px; color:var(--muted); font-size:11px; font-weight:800; }
+    .dot { width:10px; height:10px; border-radius:999px; display:inline-block; background:var(--santander-red); }
+    .dot.proj { background:repeating-linear-gradient(135deg,#1d4ed8 0,#1d4ed8 3px,#93c5fd 3px,#93c5fd 6px); }
+    .dot.target { background:#111827; }
+    .kr-interpret { margin-top:11px; padding-top:10px; border-top:1px dashed #d9dee8; color:#475467; font-size:12px; line-height:1.42; }
+
+    .grid-2 { display:grid; grid-template-columns:1.05fr .95fr; gap:18px; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:0 12px 32px rgba(16,24,40,.055); }
+    .card h3 { margin:0; font-size:17px; letter-spacing:-.2px; display:flex; align-items:center; gap:8px; }
+    .card .explain { margin:8px 0 14px; color:var(--muted); font-size:13px; line-height:1.5; }
+    .formula { display:grid; gap:12px; }
+    .formula-box { background:#101828; color:#fff; border-radius:18px; padding:16px; font-weight:900; line-height:1.45; }
+    .formula-box span { color:#fecaca; }
+    .score-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .score-item { background:#f8fafc; border:1px solid #eef2f7; border-radius:16px; padding:13px; }
+    .score-item strong { display:block; margin-bottom:4px; }
+    .score-item div { color:var(--muted); font-size:12px; line-height:1.35; }
+    .chart-box { height:330px; }
+
+    .alerts-card { min-height:520px; display:flex; flex-direction:column; }
+    .alerts-grid { flex:1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .alert { border-radius:18px; padding:14px; border:1px solid var(--line); background:#fff; display:flex; flex-direction:column; gap:9px; min-height:154px; }
+    .alert-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+    .alert-icon { width:36px; height:36px; border-radius:13px; display:inline-flex; align-items:center; justify-content:center; background:#f2f4f7; font-size:19px; flex:0 0 auto; }
+    .alert-title { font-size:14px; font-weight:900; line-height:1.25; }
+    .alert-detail { color:#475467; font-size:12px; line-height:1.38; }
+    .alert-action { margin-top:auto; color:#101828; font-size:12px; line-height:1.35; font-weight:800; background:#f8fafc; border-radius:12px; padding:9px; }
+    .sev-critical { border-color:#fecaca; background:#fff7f7; }
+    .sev-warning { border-color:#fedf89; background:#fffaf0; }
+    .sev-data { border-color:#bfdbfe; background:#eff6ff; }
+    .sev-insight { border-color:#ddd6fe; background:#f5f3ff; }
+
+    .filters { display:grid; grid-template-columns:1.3fr repeat(3,.7fr); gap:10px; margin:12px 0; }
+    input, select { width:100%; border:1px solid var(--line); border-radius:13px; padding:11px 12px; background:#fff; color:#101828; outline:none; font:inherit; font-size:13px; }
+    input:focus, select:focus { border-color:var(--santander-red); box-shadow:0 0 0 3px rgba(236,0,0,.10); }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:18px; background:#fff; }
+    table { width:100%; border-collapse:separate; border-spacing:0; min-width:1180px; }
+    th { position:sticky; top:0; background:#f8fafc; color:#475467; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.06em; padding:12px 11px; border-bottom:1px solid var(--line); z-index:1; }
+    td { padding:12px 11px; border-bottom:1px solid #eef2f7; font-size:12px; vertical-align:top; }
+    tr:hover td { background:#fffafa; }
+    .pill { display:inline-flex; align-items:center; justify-content:center; padding:5px 8px; border-radius:999px; font-size:11px; font-weight:900; white-space:nowrap; }
+    .exec { background:#ecfdf3; color:#067647; }
+    .gest { background:#eff6ff; color:#175cd3; }
+    .plan { background:#fffaeb; color:#b54708; }
+    .bloq { background:#fef3f2; color:#b42318; }
+    .high { background:#fef3f2; color:#b42318; }
+    .mid { background:#fffaeb; color:#b54708; }
+    .low { background:#f2f4f7; color:#475467; }
+    .footer { margin:28px 0 12px; color:var(--muted); font-size:12px; text-align:center; }
+
+    @media (max-width:1100px) {
+      .hero-grid,.grid-2,.grid-3 { grid-template-columns:1fr; }
+      .kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .filters { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:680px) {
+      .wrap { padding:14px; }
+      .hero { padding:22px; border-radius:24px; }
+      .hero h1 { font-size:27px; }
+      .kpi-grid,.rows-grid,.alerts-grid,.filters,.score-grid { grid-template-columns:1fr; }
+      .metric-row { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="tag">📍 Asuntos Públicos</span>
+            <span class="tag">📆 Corte de proyección: abril / mes 4</span>
+            <span class="tag">🚦 Gestión + orientación estratégica</span>
+          </div>
+          <h1>Dashboard de Gestión de Asuntos Públicos</h1>
+          <p>Herramienta para seguir objetivos, KR e hitos del área, incorporando una capa de lectura estratégica para priorizar foco, detectar brechas y transformar actividad en decisiones de gestión.</p>
+        </div>
+        <div class="hero-note">
+          <strong>Cómo se calcula el proyectado anual</strong>
+          <div>Para cada KR se usa: <b>resultado acumulado / 4 × 12</b>. La barra roja muestra el avance actual y la barra azul punteada muestra el ritmo anual proyectado contra el target.</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="kpi-grid" aria-label="Resumen ejecutivo">
+      <div class="kpi"><div class="kpi-head"><div class="kpi-title">Hitos registrados</div><div class="icon">🧩</div></div><div class="kpi-value" id="kpiHitos"></div><div class="kpi-sub">Reuniones, documentos, contenidos, alianzas y activaciones cargadas en la base.</div></div>
+      <div class="kpi"><div class="kpi-head"><div class="kpi-title">Ejecución operativa</div><div class="icon">✅</div></div><div class="kpi-value" id="kpiExec"></div><div class="kpi-sub">Hitos con estado ejecutado sobre el total cargado.</div></div>
+      <div class="kpi"><div class="kpi-head"><div class="kpi-title">Índice de influencia</div><div class="icon">⚡</div></div><div class="kpi-value" id="kpiInfluence"></div><div class="kpi-sub">Puntaje ponderado por impacto y madurez de la gestión.</div></div>
+      <div class="kpi"><div class="kpi-head"><div class="kpi-title">KR en ritmo anual</div><div class="icon">🎯</div></div><div class="kpi-value" id="kpiKR"></div><div class="kpi-sub">KR con dato cuyo proyectado anual alcanza o supera el target.</div></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">📊 Objetivos y KR con proyectado</h2>
+          <p class="section-desc">Este bloque es el núcleo de gestión: permite ver el cumplimiento actual, el target anual y si el ritmo acumulado al mes 4 alcanza para cerrar el año. No busca “castigar” objetivos cuya evolución depende de terceros; busca anticipar dónde conviene reforzar agenda, seguimiento o carga de información.</p>
+        </div>
+      </div>
+      <div class="objective-list" id="objectiveList"></div>
+    </section>
+
+    <section class="section grid-2">
+      <div class="card">
+        <h3>⚡ Índice de influencia: lógica de cálculo</h3>
+        <p class="explain">Este indicador no reemplaza los KR. Los complementa para evitar que todas las acciones cuenten igual. Sirve para priorizar calidad de gestión: un hito con actor decisor y estado avanzado pesa más que una acción exploratoria o planificada.</p>
+        <div class="formula">
+          <div class="formula-box">Puntos por hito = <span>valor de impacto</span> × <span>factor de estado</span><br>Índice total = suma de puntos de todos los hitos</div>
+          <div class="score-grid">
+            <div class="score-item"><strong>Impacto</strong><div>Alto = 3 puntos · Medio = 2 puntos · Bajo = 1 punto.</div></div>
+            <div class="score-item"><strong>Estado</strong><div>Ejecutado/Con impacto = 1 · En gestión = 0,6 · Planificado = 0,3 · Bloqueado = 0.</div></div>
+            <div class="score-item"><strong>Ejemplo</strong><div>Una reunión de impacto alto ejecutada suma 3. Un white paper medio planificado suma 0,6.</div></div>
+            <div class="score-item"><strong>Lectura</strong><div>Más puntos no significa éxito regulatorio automático: significa mayor densidad de gestión con potencial de influencia.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📌 Influencia por objetivo</h3>
+        <p class="explain">Este cuadro muestra dónde se concentra la gestión ponderada. Ayuda a distinguir objetivos con mucho volumen operativo de aquellos que efectivamente acumulan acciones de mayor impacto.</p>
+        <div class="chart-box"><canvas id="objScoreChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="section grid-2">
+      <div class="card alerts-card">
+        <h3>🚨 Alertas de gestión</h3>
+        <p class="explain">Las alertas combinan brechas de proyección, ausencia de datos y señales cualitativas. Su función es orientar conversación y priorización, no evaluar a la agencia ni asignar responsabilidades individuales.</p>
+        <div class="alerts-grid" id="alertsGrid"></div>
+      </div>
+      <div class="grid-3" style="grid-template-columns:1fr; gap:18px;">
+        <div class="card">
+          <h3>🚦 Estado de gestión</h3>
+          <p class="explain">Permite leer la madurez de la cartera de hitos: cuánto está ejecutado, cuánto sigue en preparación y dónde puede haber cuello de botella.</p>
+          <div class="chart-box" style="height:230px;"><canvas id="statusChart"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>🔥 Impacto declarado</h3>
+          <p class="explain">Sirve para mirar calidad de foco. Si la mayoría de los hitos son de bajo impacto, el dashboard debería disparar una conversación sobre priorización de actores y temas.</p>
+          <div class="chart-box" style="height:230px;"><canvas id="impactChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section grid-2">
+      <div class="card">
+        <h3>🗺️ Influencia por tema</h3>
+        <p class="explain">Este gráfico cruza temática con índice de influencia. Es útil para verificar si el esfuerzo se concentra en los temas prioritarios de la matriz de desregulación o si hay dispersión.</p>
+        <div class="chart-box"><canvas id="themeChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>🧠 Cómo interpretar este dashboard</h3>
+        <p class="explain">La lectura recomendada es secuencial: primero revisar si los KR están en ritmo; después mirar alertas; luego usar índice de influencia para priorizar actores y temas. La tabla final sirve para auditar cada hito y entender qué explica los números.</p>
+        <div class="score-grid">
+          <div class="score-item"><strong>1. Cumplimiento</strong><div>¿El acumulado y el proyectado alcanzan el target?</div></div>
+          <div class="score-item"><strong>2. Calidad</strong><div>¿Los hitos tienen impacto alto o son mayormente periféricos?</div></div>
+          <div class="score-item"><strong>3. Foco</strong><div>¿Los temas trabajados coinciden con la matriz de desregulación?</div></div>
+          <div class="score-item"><strong>4. Decisión</strong><div>¿Qué hay que acelerar, corregir o cargar mejor antes del próximo corte?</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h3>🔎 Detalle de hitos</h3>
+        <p class="explain">La tabla permite auditar la trazabilidad detrás de cada indicador. Usala para validar si un hito está bien imputado a objetivo/KR, si su impacto es consistente y si el estado refleja la realidad de la gestión.</p>
+        <div class="filters">
+          <input id="search" placeholder="Buscar por actor, tema, KR, cargo...">
+          <select id="objFilter"><option value="">Todos los objetivos</option></select>
+          <select id="statusFilter"><option value="">Todos los estados</option></select>
+          <select id="impactFilter"><option value="">Todos los impactos</option></select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th><th>Actor</th><th>Cargo</th><th>Objetivo</th><th>Obj</th><th>KR</th><th>Tipo</th><th>Estado</th><th>Impacto</th><th>Tema</th><th>Puntos</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">Dashboard AAPP26 · Datos base: Excel provisto por el área + views Santander POST informadas manualmente · Proyección anual calculada sobre mes 4.</div>
+  </div>
+
+  <script>
+    const rows = [{"fecha": "11/05/2026", "actor": "WHITE PAPER", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)", "tipo": "Contenido/Posicionamiento", "estado": "Planificado", "impacto": "Medio", "tema": "FAL", "points": 0.6}, {"fecha": "05/05/2026", "actor": "Jorge Liotti", "cargo": "Periodista", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Gestionar 6 relacionamientos del EXCO con figuras políticas/funcionarios.", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Panorama Político", "points": 1.0}, {"fecha": "30/04/2026", "actor": "Daiana Molero", "cargo": "Diputada Nacional (PRO)", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Alianza con Cámaras y Asoc. en la gestión de temas de MdD (2/3)", "tipo": "Evento/Activación", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Comisión AA.PP", "points": 1.0}, {"fecha": "22/04/2026", "actor": "Fernando De Andreis", "cargo": "Diputado Nacional (PRO)", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 1.0}, {"fecha": "09/04/2026", "actor": "Marina Ongaro", "cargo": "Subgerente Gral BCRA", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Alto", "tema": "GIRE. Actividades complementarias", "points": 3.0}, {"fecha": "09/04/2026", "actor": "Leandro Cifelli", "cargo": "Secretario de Cultura", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Gestionar 6 relacionamientos del EXCO con figuras políticas/funcionarios.", "tipo": "Evento/Activación", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Inauguración Fundación", "points": 1.0}, {"fecha": "26/03/2026", "actor": "Federico Susbielles", "cargo": "Intendente Bahía Blanca", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "12/03/2026", "actor": "Pablo Javkin", "cargo": "Intendente Rosario", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "03/03/2026", "actor": "Patricia Vasquez", "cargo": "Diputada Nacional (LLA)", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "TSH", "points": 1.0}, {"fecha": "20/02/2026", "actor": "Sergio Guenaga", "cargo": "Gerente General CECRA", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Alianza con Cámaras y Asoc. en la gestión de temas de MdD (2/3)", "tipo": "Alianza/Articulación", "estado": "En Gestión", "impacto": "Medio", "tema": "Comisión AA.PP", "points": 1.2}, {"fecha": "14/02/2026", "actor": "Agustín Neme", "cargo": "Intendente Gral Pueyrredón", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "29/01/2026", "actor": "Santiago Santurio", "cargo": "Diputado Nacional", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "28/01/2026", "actor": "NON PAPER", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj1", "kr": "Distribución de non papers a SH sobre temas de impacto en la MdD (3/5)", "tipo": "Documento Técnico", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "28/01/2026", "actor": "Eduardo Vischi", "cargo": "Senador Nacional", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 1.0}, {"fecha": "28/01/2026", "actor": "PRENSA", "cargo": "N/A", "objetivo_original": "Cross Colaboration Area", "objetivo_dashboard": "Obj4", "kr": "Cross colaboration con prensa en (2/4) temas de MdD", "tipo": "Alianza/Articulación", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "27/01/2026", "actor": "WHITE PAPER", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)", "tipo": "Contenido/Posicionamiento", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "21/01/2026", "actor": "Josefina Tajes", "cargo": "Asesora Senado", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Alto", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 3.0}];
+    const krCards = [{"objective_key": "Obj1", "objective_title": "1) Agenda de desregulación local", "objective_subtitle": "TSH, Fintech, Data, Payments", "items": [{"label": "KR1 Reuniones con impacto directo", "current": 8, "target": 12, "note": "Base: registros del archivo", "pct": 66.7, "display": "8/12", "projected": 24.0, "projected_pct": 200.0}, {"label": "KR2 Non papers a stakeholders", "current": 1, "target": 5, "note": "Incluye NON PAPER cargado", "pct": 20.0, "display": "1/5", "projected": 3.0, "projected_pct": 60.0}]}, {"objective_key": "Obj2", "objective_title": "2) Relacionamientos & Investor's Trips", "objective_subtitle": "Gestión, coordinación y concreción", "items": [{"label": "KR1 Relacionamientos EXCO con figuras políticas/funcionarios", "current": 4, "target": 6, "note": "Sin duplicar relacionamientos", "pct": 66.7, "display": "4/6", "projected": 12.0, "projected_pct": 200.0}, {"label": "KR2 Satisfacción en Inversores/Clientes", "current": null, "target": 80, "note": "Sin dato en la base actual", "suffix": "%", "display": "Sin dato", "pct": null, "projected": null, "projected_pct": null}]}, {"objective_key": "Obj3", "objective_title": "3) Advocacy", "objective_subtitle": "Contenido, posicionamiento y alianzas", "items": [{"label": "KR1 Vistas al Blog Corporativo Santander POST", "current": 84000, "target": 300000, "note": "Dato informado: 84.000 vistas al cierre del mes 4", "pct": 28.0, "display": "84.000/300.000", "projected": 252000.0, "projected_pct": 84.0}, {"label": "KR2 White papers sobre desregulación/negocio", "current": 2, "target": 5, "note": "WHITE PAPER cargados", "pct": 40.0, "display": "2/5", "projected": 6.0, "projected_pct": 120.0}, {"label": "KR3 Alianza con cámaras y asociaciones", "current": 1, "target": 3, "note": "Base: CECRA", "pct": 33.3, "display": "1/3", "projected": 3.0, "projected_pct": 100.0}]}, {"objective_key": "Obj4", "objective_title": "4) Cross Colaboration Área", "objective_subtitle": "Prensa y temas de matriz de desregulación", "items": [{"label": "KR1 Colaboraciones con prensa", "current": 1, "target": 4, "note": "Base: PRENSA", "pct": 25.0, "display": "1/4", "projected": 3.0, "projected_pct": 75.0}]}, {"objective_key": "Obj5", "objective_title": "5) Seguimiento Pentágonos", "objective_subtitle": "Coordinación con actores clave", "items": [{"label": "KR1 Reuniones con actores claves", "current": 0, "target": 5, "note": "Sin hitos cargados en el archivo", "pct": 0.0, "display": "0/5", "projected": 0.0, "projected_pct": 0.0}]}];
+    const summary = {"total_hitos": 17, "ejecutados": 15, "exec_pct": 88.2, "influence_total": 27.8, "kr_with_data": 8, "kr_on_track": 4, "kr_risk": 4, "month_cutoff": 4, "year_months": 12, "blog_current": 84000, "blog_projected": 252000};
+    const alerts = [{"severity": "warning", "icon": "📝", "title": "Non papers con brecha de cadencia", "detail": "Proyectado: 3 vs target 5; faltaría ritmo equivalente a 2 entregas.", "action": "Priorizar temas MdD con mayor capacidad de abrir conversación regulatoria."}, {"severity": "data", "icon": "🧭", "title": "Satisfacción sin dato cargado", "detail": "El KR de satisfacción todavía no tiene base cuantitativa, por lo que no puede proyectarse ni compararse contra target.", "action": "Definir fuente y frecuencia de captura antes de la próxima actualización."}, {"severity": "warning", "icon": "📉", "title": "Blog por debajo del ritmo anual", "detail": "Proyectado: 252.000 vs target 300.000; brecha estimada 48.000 vistas.", "action": "Acelerar agenda de contenidos, distribución orgánica y amplificación desde canales propios."}, {"severity": "warning", "icon": "🗞️", "title": "Cross con Prensa debajo del target", "detail": "Proyectado: 3 vs target 4; brecha estimada 1 colaboración.", "action": "Convertir temas MdD en oportunidades de posicionamiento público o técnico."}, {"severity": "critical", "icon": "🔴", "title": "Seguimiento Pentágonos sin avance visible", "detail": "Proyectado: 0 vs target 5; no hay hitos cargados en la base actual.", "action": "Validar si es falta de carga, falta de gestión o si el objetivo requiere redefinir actores prioritarios."}, {"severity": "insight", "icon": "🎯", "title": "Baja proporción de hitos de impacto alto", "detail": "Solo 2 de 17 hitos están clasificados como impacto alto (12%).", "action": "Usar el índice de influencia para priorizar actores/temas con mayor capacidad de mover agenda."}];
+    const objectiveExplanations = {"Obj1": "Permite ver si la agenda de desregulación mantiene una cadencia suficiente de reuniones y documentos técnicos. El valor principal es anticipar brechas de gestión, aunque el resultado regulatorio dependa de voluntad política.", "Obj2": "Ordena los relacionamientos concretados y ayuda a leer si existe una frecuencia razonable de acceso institucional para EXCO, inversores y clientes estratégicos.", "Obj3": "Mide la capacidad de instalar agenda desde contenidos, publicaciones y articulación sectorial. El proyectado ayuda a distinguir volumen sostenible de acciones aisladas.", "Obj4": "Muestra si los temas de matriz de desregulación están siendo convertidos en oportunidades de posicionamiento junto con Prensa.", "Obj5": "Funciona como control temprano de seguimiento con actores clave. Si no hay carga o avance, el dashboard lo debe hacer visible rápido."};
+    const chartData = {"objLabels": ["Agenda de desregulación local", "Relacionamientos & Investor's Trips", "Advocacy", "Cross Colaboration Área"], "objValues": [17.0, 5.0, 3.8, 2.0], "statusLabels": ["Ejecutado", "En Gestión", "Planificado"], "statusValues": [15, 1, 1], "impactLabels": ["Alto", "Medio", "Bajo"], "impactValues": [2, 9, 6], "themeLabels": ["Reforma Laboral. Art 35. Sueldos en CVU", "TSH", "GIRE. Actividades complementarias", "Comisión AA.PP", "Panorama Político", "Inauguración Fundación", "FAL"], "themeValues": [13.0, 7.0, 3.0, 2.2, 1.0, 1.0, 0.6]};
+    const MONTH_CUTOFF = 4;
+    const YEAR_MONTHS = 12;
+
+    const fmt = (n, suffix = '') => {
+      if (n === null || n === undefined || Number.isNaN(Number(n))) return 'Sin dato';
+      const num = Number(n);
+      const rounded = Math.abs(num) >= 1000 ? Math.round(num) : (Number.isInteger(num) ? num : Math.round(num * 10) / 10);
+      return rounded.toLocaleString('es-AR') + suffix;
+    };
+    const pct = (cur, tgt) => {
+      if (cur === null || cur === undefined || !tgt) return null;
+      return Math.round((Number(cur) / Number(tgt)) * 1000) / 10;
+    };
+    const cap = v => Math.max(0, Math.min(100, v));
+
+    function pillClassByStatus(s) {
+      if (s === 'Ejecutado' || s === 'Con Impacto') return 'exec';
+      if (s === 'En Gestión') return 'gest';
+      if (s === 'Planificado') return 'plan';
+      if (s === 'Bloqueado/Sin Avance') return 'bloq';
+      return 'plan';
+    }
+    function pillClassByImpact(i) {
+      if (i === 'Alto') return 'high';
+      if (i === 'Medio') return 'mid';
+      return 'low';
+    }
+    function objectivePill(obj) {
+      if (obj === 'Obj1') return 'exec';
+      if (obj === 'Obj2') return 'gest';
+      if (obj === 'Obj3') return 'plan';
+      return 'bloq';
+    }
+
+    function krStatus(item) {
+      if (item.projected === null || item.projected === undefined) return {label:'Sin dato', cls:'nodata', icon:'○'};
+      if (Number(item.projected) >= Number(item.target)) return {label:'En ritmo', cls:'ok', icon:'✓'};
+      return {label:'Requiere foco', cls:'risk', icon:'!'};
+    }
+    function krInterpretation(item) {
+      if (item.projected === null || item.projected === undefined) return 'No se puede proyectar: falta dato cuantitativo o fuente definida.';
+      const proj = Number(item.projected), target = Number(item.target);
+      if (proj >= target) return `Al ritmo del mes 4, el KR llegaría a ${fmt(proj, item.suffix || '')}, por encima del target de ${fmt(target, item.suffix || '')}.`;
+      return `Al ritmo del mes 4, el KR cerraría en ${fmt(proj, item.suffix || '')}, por debajo del target de ${fmt(target, item.suffix || '')}.`;
+    }
+
+    function renderKPIs() {
+      document.getElementById('kpiHitos').textContent = fmt(summary.total_hitos);
+      document.getElementById('kpiExec').textContent = `${fmt(summary.ejecutados)}/${fmt(summary.total_hitos)}`;
+      document.getElementById('kpiInfluence').textContent = fmt(summary.influence_total);
+      document.getElementById('kpiKR').textContent = `${fmt(summary.kr_on_track)}/${fmt(summary.kr_with_data)}`;
+    }
+
+    function renderObjectives() {
+      const el = document.getElementById('objectiveList');
+      el.innerHTML = '';
+      krCards.forEach(card => {
+        const count = rows.filter(r => r.objetivo_dashboard === card.objective_key).length;
+        const div = document.createElement('div');
+        div.className = 'objective';
+        div.innerHTML = `
+          <div class="objective-head">
+            <div>
+              <h3 class="objective-title">${card.objective_title}</h3>
+              <div class="objective-sub">${card.objective_subtitle} · ${count} hitos en la base</div>
+              <div class="objective-exp"><span>💡</span><span>${objectiveExplanations[card.objective_key] || 'Este bloque muestra avance actual, target y ritmo proyectado.'}</span></div>
+            </div>
+            <div class="badge">${card.objective_key}</div>
+          </div>
+          <div class="rows-grid">
+            ${card.items.map(item => {
+              const st = krStatus(item);
+              const current = item.current;
+              const target = item.target;
+              const projected = item.projected;
+              const suffix = item.suffix || '';
+              const currentPct = pct(current, target);
+              const projectedPct = pct(projected, target);
+              const actualWidth = currentPct === null ? 0 : cap(currentPct);
+              const projWidth = projectedPct === null ? 0 : cap(projectedPct);
+              return `
+                <div class="kr">
+                  <div>
+                    <div class="kr-top">
+                      <div>
+                        <div class="kr-label">${item.label}</div>
+                        <div class="kr-meta">${item.note}</div>
+                      </div>
+                      <span class="status-chip ${st.cls}">${st.icon} ${st.label}</span>
+                    </div>
+                    <div class="metric-row">
+                      <div class="metric-box"><strong>${current === null || current === undefined ? 'Sin dato' : fmt(current, suffix)}</strong><span>Actual M4</span></div>
+                      <div class="metric-box"><strong>${projected === null || projected === undefined ? 'Sin dato' : fmt(projected, suffix)}</strong><span>Proyectado anual</span></div>
+                    </div>
+                    <div class="target-row"><span>Target anual</span><strong>${fmt(target, suffix)}</strong></div>
+                    <div class="bar-area">
+                      <div>
+                        <div class="bar-label"><span>Actual</span><span>${currentPct === null ? 's/d' : fmt(currentPct, '%')}</span></div>
+                        <div class="progress"><div class="bar ${current === null || current === undefined ? 'gray' : ''}" style="width:${current === null || current === undefined ? 10 : Math.max(3, actualWidth)}%"></div></div>
+                      </div>
+                      <div>
+                        <div class="bar-label"><span>Proyectado</span><span>${projectedPct === null ? 's/d' : fmt(projectedPct, '%')}</span></div>
+                        <div class="progress"><div class="projected-bar ${projected === null || projected === undefined ? 'gray' : ''}" style="width:${projected === null || projected === undefined ? 10 : Math.max(3, projWidth)}%"></div></div>
+                      </div>
+                    </div>
+                    <div class="legend"><span><i class="dot"></i> Actual</span><span><i class="dot proj"></i> Proyectado</span><span><i class="dot target"></i> Target = 100%</span></div>
+                  </div>
+                  <div class="kr-interpret">${krInterpretation(item)}</div>
+                </div>`;
+            }).join('')}
+          </div>`;
+        el.appendChild(div);
+      });
+    }
+
+    function renderAlerts() {
+      const grid = document.getElementById('alertsGrid');
+      grid.innerHTML = alerts.map(a => `
+        <div class="alert sev-${a.severity}">
+          <div class="alert-head">
+            <div>
+              <div class="alert-title">${a.title}</div>
+              <div class="alert-detail">${a.detail}</div>
+            </div>
+            <div class="alert-icon">${a.icon}</div>
+          </div>
+          <div class="alert-action">Próxima decisión: ${a.action}</div>
+        </div>
+      `).join('');
+    }
+
+    function buildSelect(selectId, values) {
+      const select = document.getElementById(selectId);
+      values.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderTable() {
+      const q = document.getElementById('search').value.toLowerCase().trim();
+      const obj = document.getElementById('objFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const impact = document.getElementById('impactFilter').value;
+      const body = document.getElementById('tbody');
+      const filtered = rows.filter(r => {
+        const text = `${r.fecha} ${r.actor} ${r.cargo} ${r.objetivo_original} ${r.objetivo_dashboard} ${r.kr} ${r.tipo} ${r.estado} ${r.impacto} ${r.tema}`.toLowerCase();
+        return (!q || text.includes(q)) && (!obj || r.objetivo_dashboard === obj) && (!status || r.estado === status) && (!impact || r.impacto === impact);
+      });
+      body.innerHTML = filtered.map(r => `
+        <tr>
+          <td>${r.fecha}</td>
+          <td><strong>${r.actor}</strong></td>
+          <td>${r.cargo}</td>
+          <td>${r.objetivo_original}</td>
+          <td><span class="pill ${objectivePill(r.objetivo_dashboard)}">${r.objetivo_dashboard}</span></td>
+          <td>${r.kr}</td>
+          <td>${r.tipo}</td>
+          <td><span class="pill ${pillClassByStatus(r.estado)}">${r.estado}</span></td>
+          <td><span class="pill ${pillClassByImpact(r.impacto)}">${r.impacto}</span></td>
+          <td>${r.tema}</td>
+          <td><strong>${Number(r.points || 0).toFixed(2)}</strong></td>
+        </tr>
+      `).join('') || `<tr><td colspan="11" style="text-align:center; padding:26px; color:#667085;">No hay resultados con los filtros actuales.</td></tr>`;
+    }
+
+    function mkChart(elId, type, labels, values, options = {}) {
+      const ctx = document.getElementById(elId);
+      if (typeof Chart === 'undefined') {
+        ctx.style.display = 'none';
+        const fallback = document.createElement('div');
+        fallback.className = 'small-note';
+        fallback.style.padding = '18px';
+        fallback.style.background = '#f8fafc';
+        fallback.style.border = '1px solid #eef2f7';
+        fallback.style.borderRadius = '16px';
+        fallback.textContent = 'El gráfico se carga online mediante Chart.js. Si estás viendo el archivo sin conexión, la tabla y las barras de KR siguen disponibles.';
+        ctx.parentElement.appendChild(fallback);
+        return null;
+      }
+      const baseOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#101828',
+            padding: 12,
+            cornerRadius: 12,
+            titleFont: { weight: '800' },
+            bodyFont: { weight: '600' }
+          }
+        },
+        scales: type === 'doughnut' ? {} : {
+          x: { beginAtZero: true, grid: { color: '#eef2f7' }, ticks: { color: '#667085' } },
+          y: { grid: { display: false }, ticks: { color: '#667085' } }
+        }
+      };
+      return new Chart(ctx, {
+        type,
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            borderWidth: 1,
+            borderColor: 'rgba(16,24,40,.08)',
+            borderRadius: type === 'bar' ? 10 : 0,
+            backgroundColor: options.colors || ['#ec0000','#2563eb','#f59e0b','#16a34a','#7c3aed','#64748b','#fb7185','#0ea5e9']
+          }]
+        },
+        options: Object.assign(baseOptions, options)
+      });
+    }
+
+    renderKPIs();
+    renderObjectives();
+    renderAlerts();
+    buildSelect('objFilter', [...new Set(rows.map(r => r.objetivo_dashboard))].sort());
+    buildSelect('statusFilter', [...new Set(rows.map(r => r.estado))].sort());
+    buildSelect('impactFilter', [...new Set(rows.map(r => r.impacto))].sort());
+    renderTable();
+    document.getElementById('search').addEventListener('input', renderTable);
+    document.getElementById('objFilter').addEventListener('change', renderTable);
+    document.getElementById('statusFilter').addEventListener('change', renderTable);
+    document.getElementById('impactFilter').addEventListener('change', renderTable);
+
+    mkChart('objScoreChart', 'bar', chartData.objLabels, chartData.objValues, {
+      indexAxis: 'y',
+      scales: { x: { beginAtZero: true, grid: { color: '#eef2f7' } }, y: { grid: { display: false } } }
+    });
+    mkChart('statusChart', 'doughnut', chartData.statusLabels, chartData.statusValues, { cutout: '66%' });
+    mkChart('impactChart', 'bar', chartData.impactLabels, chartData.impactValues, {
+      indexAxis: 'y',
+      scales: { x: { beginAtZero: true, grid: { color: '#eef2f7' }, ticks: { precision: 0 } }, y: { grid: { display: false } } }
+    });
+    mkChart('themeChart', 'bar', chartData.themeLabels, chartData.themeValues, {
+      indexAxis: 'y',
+      scales: { x: { beginAtZero: true, grid: { color: '#eef2f7' } }, y: { grid: { display: false } } }
+    });
+  </script>
+</body>
+</html>
