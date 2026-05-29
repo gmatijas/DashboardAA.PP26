@@ -156,6 +156,735 @@
       .kpi-grid,.rows-grid,.alerts-grid,.filters,.score-grid { grid-template-columns:1fr; }
       .metric-row { grid-template-columns:1fr; }
     }
+
+
+    /* V3: lectura más limpia y target anual como referencia principal */
+    body { background:#f7f8fb; }
+    .wrap { max-width:1380px; }
+    .hero {
+      background:#fff;
+      color:var(--ink);
+      border:1px solid var(--line);
+      border-top:5px solid var(--santander-red);
+      padding:24px 26px;
+      box-shadow:0 10px 28px rgba(16,24,40,.06);
+    }
+    .hero::after { display:none; }
+    .tag {
+      background:#fff1f1;
+      border:1px solid #ffd6d6;
+      color:var(--santander-red-dark);
+    }
+    .hero p { color:var(--muted); }
+    .hero-note {
+      background:#f8fafc;
+      border:1px solid #e5e7eb;
+      color:var(--ink);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+    }
+    .hero-note div { color:#475467; }
+    .hero-note strong { color:var(--santander-red-dark); }
+    .kpi { box-shadow:0 8px 22px rgba(16,24,40,.045); }
+    .objective { box-shadow:0 8px 22px rgba(16,24,40,.045); }
+    .objective-head {
+      padding:18px 20px 15px;
+      background:#fff;
+    }
+    .objective-title { font-size:18px; }
+    .rows-grid { grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:13px; padding:14px; }
+    .kr {
+      min-height:0;
+      padding:16px;
+      border-radius:18px;
+      box-shadow:none;
+      justify-content:flex-start;
+      gap:12px;
+    }
+    .kr-label { font-size:14px; }
+    .kr-meta { color:#667085; }
+    .status-chip { padding:6px 8px; font-size:10.5px; }
+    .target-card {
+      margin-top:14px;
+      padding:14px 15px;
+      border-radius:17px;
+      background:linear-gradient(180deg,#fff,#fff7f7);
+      border:1px solid #ffc9c9;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:14px;
+    }
+    .target-card span {
+      display:block;
+      color:#8a8f98;
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      margin-bottom:5px;
+    }
+    .target-card strong {
+      display:block;
+      color:var(--santander-red-dark);
+      font-size:32px;
+      line-height:.95;
+      letter-spacing:-.7px;
+    }
+    .target-card small {
+      display:block;
+      text-align:right;
+      color:#667085;
+      font-size:11px;
+      line-height:1.35;
+      max-width:150px;
+    }
+    .progress-summary {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:10px 0 12px;
+    }
+    .mini-metric {
+      background:#f8fafc;
+      border:1px solid #eef2f7;
+      border-radius:15px;
+      padding:11px 12px;
+    }
+    .mini-metric strong {
+      display:block;
+      font-size:19px;
+      letter-spacing:-.3px;
+    }
+    .mini-metric span {
+      display:block;
+      margin-top:4px;
+      color:#667085;
+      font-size:10.5px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .mini-metric.projected {
+      background:#fbfcfe;
+      border-style:dashed;
+    }
+    .mini-metric.projected strong {
+      color:#475467;
+      font-size:17px;
+      font-weight:850;
+    }
+    .target-progress-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      color:#475467;
+      font-size:12px;
+      font-weight:850;
+      margin-bottom:7px;
+    }
+    .target-progress-head strong { color:#101828; }
+    .progress.clean-track {
+      height:12px;
+      overflow:visible;
+      background:#f1f5f9;
+      border-color:#dbe3ee;
+    }
+    .projection-marker {
+      position:absolute;
+      top:-4px;
+      bottom:-4px;
+      width:0;
+      border-left:2px dashed #64748b;
+      opacity:.55;
+      transform:translateX(-1px);
+    }
+    .projected-note {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:8px;
+      color:#667085;
+      font-size:11px;
+      line-height:1.35;
+    }
+    .projected-note b { color:#475467; }
+    .kr-interpret {
+      margin-top:0;
+      padding-top:11px;
+      color:#475467;
+      font-size:12px;
+      border-top:1px solid #eef2f7;
+    }
+    .legend { display:none; }
+    .metric-row, .target-row, .bar-area .bar-label + .progress:not(.clean-track) { display:none; }
+    .card { box-shadow:0 8px 22px rgba(16,24,40,.045); }
+    @media (max-width:680px) {
+      .progress-summary { grid-template-columns:1fr; }
+      .target-card { align-items:flex-start; flex-direction:column; }
+      .target-card small { text-align:left; max-width:none; }
+    }
+
+
+
+
+
+    /* V4: vista compacta para lectura ejecutiva de primer vistazo */
+    .wrap { max-width:1500px; padding:16px 18px; }
+    .hero { padding:16px 18px; border-radius:21px; }
+    .hero-grid { grid-template-columns:1.35fr .65fr; gap:14px; align-items:center; }
+    .eyebrow { margin-bottom:8px; gap:7px; }
+    .tag { padding:6px 8px; font-size:11.8px; }
+    .hero h1 { font-size:27px; line-height:1.08; }
+    .hero p { margin-top:7px; font-size:12.8px; line-height:1.38; max-width:790px; }
+    .hero-note { padding:12px 13px; border-radius:15px; }
+    .hero-note strong { margin-bottom:4px; font-size:12.4px; }
+    .hero-note div { font-size:11.7px; line-height:1.32; }
+
+    .kpi-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin:11px 0 13px; }
+    .kpi { min-height:88px; padding:11px 12px; border-radius:16px; }
+    .icon { width:31px; height:31px; border-radius:10px; font-size:16px; }
+    .kpi-title { font-size:10.2px; letter-spacing:.06em; }
+    .kpi-value { margin-top:7px; font-size:24px; }
+    .kpi-sub { margin-top:4px; font-size:11px; line-height:1.24; }
+
+    .section { margin-top:15px; }
+    .section-head { margin:0 0 8px; align-items:center; }
+    .section-title { font-size:18.5px; gap:7px; }
+    .section-desc { margin-top:4px; font-size:12.1px; line-height:1.33; max-width:1160px; }
+    .small-note { font-size:10.8px; }
+
+    .objective-list {
+      display:grid;
+      grid-template-columns:repeat(5,minmax(220px,1fr));
+      gap:9px;
+      align-items:start;
+    }
+    .objective {
+      border-radius:17px;
+      box-shadow:0 6px 16px rgba(16,24,40,.045);
+      min-height:100%;
+      overflow:hidden;
+    }
+    .objective-head {
+      display:block;
+      padding:10px 11px 9px;
+      border-bottom:1px solid #edf0f5;
+      background:#fff;
+    }
+    .objective-title-row {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:7px;
+    }
+    .objective-title { font-size:14.2px; line-height:1.16; letter-spacing:-.12px; }
+    .objective-sub { margin-top:4px; font-size:10.6px; line-height:1.22; }
+    .objective-exp {
+      margin-top:6px;
+      color:#667085;
+      font-size:10.4px;
+      line-height:1.25;
+      gap:5px;
+      max-width:none;
+      display:flex;
+      align-items:flex-start;
+    }
+    .objective-exp span:last-child {
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .badge { padding:4px 7px; font-size:10px; flex:0 0 auto; }
+
+    .rows-grid.compact-kr-list {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:7px;
+      padding:8px;
+    }
+    .kr.compact-kr {
+      padding:8px;
+      border-radius:13px;
+      gap:6px;
+      min-height:0;
+      background:#fff;
+      border-color:#edf0f5;
+      justify-content:flex-start;
+    }
+    .kr-main-line {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:7px;
+      align-items:start;
+    }
+    .kr-label { font-size:11.6px; line-height:1.16; }
+    .kr-meta { margin-top:3px; font-size:10px; line-height:1.18; color:#667085; }
+    .status-chip { padding:3px 5px; font-size:9.2px; gap:3px; }
+
+    .compact-metrics {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:5px;
+      margin-top:1px;
+    }
+    .compact-metric {
+      background:#f8fafc;
+      border:1px solid #eef2f7;
+      border-radius:10px;
+      padding:6px 6px 5px;
+      min-width:0;
+    }
+    .compact-metric span {
+      display:block;
+      color:#667085;
+      font-size:8.4px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      white-space:nowrap;
+    }
+    .compact-metric strong {
+      display:block;
+      margin-top:2px;
+      font-size:12.4px;
+      line-height:1;
+      letter-spacing:-.2px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .compact-metric em {
+      display:block;
+      margin-top:2px;
+      color:#667085;
+      font-size:8.7px;
+      font-style:normal;
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .compact-metric.target {
+      background:#fff6f6;
+      border-color:#ffcaca;
+    }
+    .compact-metric.target strong {
+      color:var(--santander-red-dark);
+      font-size:14.2px;
+      font-weight:950;
+    }
+    .compact-metric.projected {
+      background:#fbfcfe;
+      border-style:dashed;
+    }
+    .compact-metric.projected strong { color:#475467; font-size:11.8px; }
+
+    .compact-progress-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:7px;
+      color:#667085;
+      font-size:9.6px;
+      font-weight:850;
+      margin-top:1px;
+    }
+    .compact-progress-head b { color:#101828; }
+    .progress.clean-track { height:8px; }
+    .projection-marker { top:-3px; bottom:-3px; border-left-width:2px; opacity:.45; }
+    .compact-proj-note {
+      display:flex;
+      justify-content:space-between;
+      gap:6px;
+      margin-top:3px;
+      color:#667085;
+      font-size:9.2px;
+      line-height:1.15;
+    }
+    .compact-proj-note b { color:#475467; }
+    .kr-interpret.compact-line {
+      margin-top:0;
+      padding-top:5px;
+      font-size:10px;
+      line-height:1.22;
+      border-top:1px solid #eef2f7;
+      display:flex;
+      gap:4px;
+      align-items:flex-start;
+      color:#475467;
+    }
+    .kr-interpret.compact-line span:last-child {
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    /* Oculta estructura visual anterior de V3 si queda sin uso */
+    .target-card, .progress-summary, .target-progress-head, .projected-note { }
+
+    .grid-2 { gap:12px; }
+    .grid-3 { gap:12px; }
+    .card { padding:14px; border-radius:18px; }
+    .card h3 { font-size:15px; }
+    .card .explain { margin:6px 0 10px; font-size:12px; line-height:1.38; }
+    .chart-box { height:285px; }
+    .alerts-card { min-height:430px; }
+    .alerts-grid { gap:8px; margin-top:10px; }
+    .alert { min-height:120px; padding:11px; border-radius:15px; gap:7px; }
+    .alert-icon { width:31px; height:31px; border-radius:11px; font-size:16px; }
+    .alert-title { font-size:12.5px; }
+    .alert-detail { font-size:11px; line-height:1.3; }
+    .alert-action { padding:7px; font-size:10.8px; line-height:1.25; border-radius:10px; }
+    .score-grid { gap:8px; }
+    .score-item { padding:10px; border-radius:13px; }
+    .score-item div { font-size:11px; line-height:1.28; }
+    .formula-box { padding:13px; border-radius:15px; font-size:13px; }
+    .filters { gap:8px; margin:10px 0; }
+    input, select { padding:9px 10px; border-radius:11px; font-size:12px; }
+    th { padding:10px 9px; }
+    td { padding:10px 9px; }
+
+    @media (max-width:1180px) {
+      .hero-grid,.grid-2,.grid-3 { grid-template-columns:1fr; }
+      .objective-list { grid-template-columns:repeat(3,minmax(230px,1fr)); }
+    }
+    @media (max-width:900px) {
+      .objective-list { grid-template-columns:repeat(2,minmax(230px,1fr)); }
+      .kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:680px) {
+      .wrap { padding:12px; }
+      .hero { padding:16px; }
+      .hero h1 { font-size:24px; }
+      .objective-list { grid-template-columns:1fr; }
+      .compact-metrics { grid-template-columns:1fr 1fr 1fr; }
+    }
+    @media (max-width:480px) {
+      .kpi-grid { grid-template-columns:1fr; }
+      .compact-metrics { grid-template-columns:1fr; }
+    }
+
+
+
+    /* V5: layout horizontal, lectura más compacta y menor espacio blanco */
+    .wrap { max-width:1560px; padding:14px 16px; }
+    .hero { padding:14px 16px; }
+    .hero h1 { font-size:25px; }
+    .hero p { font-size:12.4px; max-width:860px; }
+    .hero-note { padding:10px 12px; }
+
+    .kpi-grid { gap:8px; margin:10px 0 12px; }
+    .kpi { min-height:78px; padding:10px 11px; border-radius:15px; }
+    .kpi-value { font-size:22px; }
+    .kpi-sub { font-size:10.7px; }
+
+    .section { margin-top:12px; }
+    .section-title { font-size:17px; }
+    .section-desc { font-size:11.8px; max-width:1180px; }
+
+    /* Objetivos: cada objetivo pasa a una fila horizontal. */
+    .objective-list {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:7px;
+    }
+    .objective {
+      display:grid;
+      grid-template-columns:minmax(220px,255px) 1fr;
+      align-items:stretch;
+      border-radius:15px;
+      min-height:0;
+    }
+    .objective-head {
+      border-bottom:0;
+      border-right:1px solid #edf0f5;
+      padding:9px 10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .objective-title { font-size:13.4px; line-height:1.12; }
+    .objective-sub { font-size:10.2px; margin-top:3px; }
+    .objective-exp { margin-top:5px; font-size:9.6px; line-height:1.18; }
+    .objective-exp span:last-child { -webkit-line-clamp:2; }
+    .badge { padding:3px 6px; font-size:9.4px; }
+    .rows-grid.compact-kr-list {
+      grid-template-columns:repeat(auto-fit,minmax(205px,1fr));
+      gap:6px;
+      padding:7px;
+      align-items:stretch;
+    }
+    .kr.compact-kr {
+      padding:7px;
+      border-radius:12px;
+      gap:5px;
+    }
+    .kr-main-line { gap:5px; }
+    .kr-label { font-size:10.9px; line-height:1.13; }
+    .kr-meta { font-size:9.2px; line-height:1.14; }
+    .status-chip { font-size:8.8px; padding:3px 5px; }
+    .compact-metrics { gap:4px; }
+    .compact-metric { padding:5px 5px 4px; border-radius:9px; }
+    .compact-metric span { font-size:7.8px; }
+    .compact-metric strong { font-size:11.6px; }
+    .compact-metric.target strong { font-size:13px; }
+    .compact-metric.projected strong { font-size:11px; }
+    .compact-metric em { font-size:8px; }
+    .compact-progress-head { font-size:8.9px; }
+    .progress.clean-track { height:7px; }
+    .compact-proj-note { display:none; }
+    .kr-interpret.compact-line { display:none; }
+
+    /* Explicación del índice: una banda compacta. */
+    .compact-info-card { padding:10px 12px; }
+    .compact-info-head {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+    }
+    .compact-info-head h3 { font-size:14.5px; }
+    .compact-info-head .explain { margin:4px 0 0; font-size:11.2px; line-height:1.28; }
+    .compact-formula-box {
+      padding:9px 12px;
+      border-radius:12px;
+      font-size:11.6px;
+      white-space:nowrap;
+    }
+    .compact-score-grid {
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:7px;
+      margin-top:8px;
+    }
+    .compact-score-grid .score-item { padding:7px 8px; border-radius:11px; }
+    .score-item strong { font-size:11.2px; }
+    .score-item div { font-size:10.2px; line-height:1.22; }
+
+    /* Gráficos en una sola fila, tarjetas bajas. */
+    .analytics-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+    }
+    .compact-chart-card {
+      padding:10px 11px;
+      border-radius:15px;
+    }
+    .compact-chart-card h3 { font-size:14px; }
+    .compact-chart-card .explain { margin:3px 0 6px; font-size:10.8px; line-height:1.22; }
+    .compact-chart-box { height:160px; }
+
+    /* Alertas: banda horizontal, no bloque vertical. */
+    .horizontal-alerts-card {
+      min-height:0;
+      padding:10px 11px;
+      border-radius:15px;
+    }
+    .alerts-headline h3 { font-size:14.5px; }
+    .alerts-headline .explain { margin:3px 0 7px; font-size:10.8px; line-height:1.22; }
+    .horizontal-alerts-grid {
+      display:grid;
+      grid-template-columns:repeat(6,minmax(0,1fr));
+      gap:7px;
+      margin-top:0;
+    }
+    .alert {
+      min-height:0;
+      padding:8px;
+      border-radius:12px;
+      gap:5px;
+    }
+    .alert-head {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:6px;
+      align-items:start;
+    }
+    .alert-icon { width:27px; height:27px; border-radius:9px; font-size:14px; }
+    .alert-title { font-size:11px; line-height:1.14; }
+    .alert-detail {
+      font-size:9.7px;
+      line-height:1.18;
+      margin-top:3px;
+      display:-webkit-box;
+      -webkit-line-clamp:3;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .alert-action {
+      margin-top:0;
+      padding:6px;
+      border-radius:9px;
+      font-size:9.4px;
+      line-height:1.15;
+      display:-webkit-box;
+      -webkit-line-clamp:3;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .guide-compact-card {
+      padding:10px 11px;
+      border-radius:15px;
+    }
+    .guide-compact-card h3 { font-size:14.5px; }
+    .guide-steps {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:7px;
+      margin-top:7px;
+    }
+    .guide-steps .score-item { padding:7px 8px; border-radius:11px; }
+
+    .filters { margin:8px 0; }
+    th { padding:8px 8px; }
+    td { padding:8px 8px; }
+    .footer { margin:18px 0 8px; }
+
+    @media (max-width:1280px) {
+      .horizontal-alerts-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .compact-chart-box { height:150px; }
+    }
+    @media (max-width:1100px) {
+      .objective { grid-template-columns:1fr; }
+      .objective-head { border-right:0; border-bottom:1px solid #edf0f5; }
+      .analytics-grid { grid-template-columns:1fr; }
+      .compact-chart-box { height:190px; }
+      .compact-score-grid, .guide-steps { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .compact-info-head { grid-template-columns:1fr; }
+      .compact-formula-box { white-space:normal; }
+    }
+    @media (max-width:760px) {
+      .horizontal-alerts-grid { grid-template-columns:1fr; }
+      .compact-score-grid, .guide-steps { grid-template-columns:1fr; }
+      .rows-grid.compact-kr-list { grid-template-columns:1fr; }
+    }
+
+
+    /* V7: menos ruido, tooltips para objetivos y alertas a todo el ancho */
+    .compact-progress-head {
+      justify-content:flex-start;
+      margin-top:0;
+      margin-bottom:3px;
+      color:#8a94a6;
+      font-size:8.6px;
+    }
+    .compact-progress-head b { display:none !important; }
+    .objective { overflow:visible; position:relative; }
+    .objective-head { overflow:visible; position:relative; z-index:3; }
+    .objective-exp { position:relative; }
+    .objective-exp {
+      cursor:help;
+      border-radius:6px;
+      outline:none;
+    }
+    .objective-exp:focus-visible {
+      outline:2px solid rgba(236,0,0,.18);
+      outline-offset:2px;
+    }
+    .objective-exp:hover::after,
+    .objective-exp:focus::after {
+      content:attr(data-full);
+      position:absolute;
+      left:0;
+      top:calc(100% + 8px);
+      z-index:80;
+      width:min(430px, 72vw);
+      padding:10px 11px;
+      border-radius:11px;
+      background:#101828;
+      color:#fff;
+      box-shadow:0 14px 36px rgba(16,24,40,.24);
+      font-size:11px;
+      line-height:1.36;
+      font-weight:650;
+      white-space:normal;
+      pointer-events:none;
+    }
+    .objective-exp:hover::before,
+    .objective-exp:focus::before {
+      content:"";
+      position:absolute;
+      left:12px;
+      top:calc(100% + 2px);
+      z-index:81;
+      border:6px solid transparent;
+      border-bottom-color:#101828;
+      pointer-events:none;
+    }
+    .horizontal-alerts-grid {
+      width:100%;
+      grid-template-columns:repeat(auto-fit,minmax(235px,1fr));
+      align-items:stretch;
+    }
+    .horizontal-alerts-grid .alert {
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    .horizontal-alerts-grid .alert-action { margin-top:auto; }
+    @media (max-width:900px) {
+      .horizontal-alerts-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:620px) {
+      .horizontal-alerts-grid { grid-template-columns:1fr; }
+    }
+
+
+    /* V7.1: tooltip del objetivo desde el contenedor para que no quede recortado */
+    .objective { z-index:1; }
+    .objective:hover,
+    .objective:focus-within { z-index:40; }
+    .objective-exp {
+      cursor:help;
+      outline:none;
+      border-radius:7px;
+    }
+    .objective-exp:focus {
+      outline:2px solid rgba(236,0,0,.18);
+      outline-offset:2px;
+    }
+    .objective-exp .exp-text:hover::after,
+    .objective-exp .exp-text:focus::after,
+    .objective-exp .exp-text:hover::before,
+    .objective-exp .exp-text:focus::before {
+      content:none !important;
+      display:none !important;
+    }
+    .objective-exp:hover::after,
+    .objective-exp:focus::after {
+      content:attr(data-full);
+      position:absolute;
+      left:0;
+      top:calc(100% + 8px);
+      z-index:120;
+      width:min(520px, 78vw);
+      padding:10px 11px;
+      border-radius:11px;
+      background:#101828;
+      color:#fff;
+      box-shadow:0 14px 36px rgba(16,24,40,.24);
+      font-size:11px;
+      line-height:1.36;
+      font-weight:650;
+      white-space:normal;
+      pointer-events:none;
+    }
+    .objective-exp:hover::before,
+    .objective-exp:focus::before {
+      content:"";
+      position:absolute;
+      left:13px;
+      top:calc(100% + 2px);
+      z-index:121;
+      border:6px solid transparent;
+      border-bottom-color:#101828;
+      pointer-events:none;
+    }
+
   </style>
 </head>
 <body>
@@ -165,15 +894,15 @@
         <div>
           <div class="eyebrow">
             <span class="tag">📍 Asuntos Públicos</span>
-            <span class="tag">📆 Corte de proyección: abril / mes 4</span>
+            <span class="tag">📆 Corte de proyección: mayo / mes 5</span>
             <span class="tag">🚦 Gestión + orientación estratégica</span>
           </div>
           <h1>Dashboard de Gestión de Asuntos Públicos</h1>
           <p>Herramienta para seguir objetivos, KR e hitos del área, incorporando una capa de lectura estratégica para priorizar foco, detectar brechas y transformar actividad en decisiones de gestión.</p>
         </div>
         <div class="hero-note">
-          <strong>Cómo se calcula el proyectado anual</strong>
-          <div>Para cada KR se usa: <b>resultado acumulado / 4 × 12</b>. La barra roja muestra el avance actual y la barra azul punteada muestra el ritmo anual proyectado contra el target.</div>
+          <strong>Referencia principal: target anual</strong>
+          <div>La comparación central es contra el <b>target anual</b>. El proyectado queda como señal secundaria de ritmo: <b>resultado acumulado / 5 × 12</b>.</div>
         </div>
       </div>
     </header>
@@ -188,68 +917,69 @@
     <section class="section">
       <div class="section-head">
         <div>
-          <h2 class="section-title">📊 Objetivos y KR con proyectado</h2>
-          <p class="section-desc">Este bloque es el núcleo de gestión: permite ver el cumplimiento actual, el target anual y si el ritmo acumulado al mes 4 alcanza para cerrar el año. No busca “castigar” objetivos cuya evolución depende de terceros; busca anticipar dónde conviene reforzar agenda, seguimiento o carga de información.</p>
+          <h2 class="section-title">📊 Objetivos y KR vs target anual</h2>
+          <p class="section-desc">Este bloque es el núcleo de gestión. La lectura principal es el avance acumulado frente al target anual; el proyectado queda como una referencia secundaria para anticipar desvíos de ritmo y decidir dónde reforzar agenda, seguimiento o carga de información.</p>
         </div>
       </div>
       <div class="objective-list" id="objectiveList"></div>
     </section>
 
-    <section class="section grid-2">
-      <div class="card">
-        <h3>⚡ Índice de influencia: lógica de cálculo</h3>
-        <p class="explain">Este indicador no reemplaza los KR. Los complementa para evitar que todas las acciones cuenten igual. Sirve para priorizar calidad de gestión: un hito con actor decisor y estado avanzado pesa más que una acción exploratoria o planificada.</p>
-        <div class="formula">
-          <div class="formula-box">Puntos por hito = <span>valor de impacto</span> × <span>factor de estado</span><br>Índice total = suma de puntos de todos los hitos</div>
-          <div class="score-grid">
-            <div class="score-item"><strong>Impacto</strong><div>Alto = 3 puntos · Medio = 2 puntos · Bajo = 1 punto.</div></div>
-            <div class="score-item"><strong>Estado</strong><div>Ejecutado/Con impacto = 1 · En gestión = 0,6 · Planificado = 0,3 · Bloqueado = 0.</div></div>
-            <div class="score-item"><strong>Ejemplo</strong><div>Una reunión de impacto alto ejecutada suma 3. Un white paper medio planificado suma 0,6.</div></div>
-            <div class="score-item"><strong>Lectura</strong><div>Más puntos no significa éxito regulatorio automático: significa mayor densidad de gestión con potencial de influencia.</div></div>
+    <section class="section compact-formula-section">
+      <div class="card formula-card compact-info-card">
+        <div class="compact-info-head">
+          <div>
+            <h3>⚡ Índice de influencia: lógica de cálculo</h3>
+            <p class="explain">No reemplaza los KR: suma una lectura de calidad para que no todas las acciones pesen igual. Es útil para priorizar actores, temas y próximos pasos.</p>
+          </div>
+          <div class="formula-box compact-formula-box">Puntos = <span>impacto</span> × <span>estado</span></div>
+        </div>
+        <div class="score-grid compact-score-grid">
+          <div class="score-item"><strong>Impacto</strong><div>Alto = 3 · Medio = 2 · Bajo = 1.</div></div>
+          <div class="score-item"><strong>Estado</strong><div>Ejecutado = 1 · En gestión = 0,6 · Planificado = 0,3.</div></div>
+          <div class="score-item"><strong>Ejemplo</strong><div>Impacto alto ejecutado suma 3 puntos.</div></div>
+          <div class="score-item"><strong>Lectura</strong><div>Más puntos = mayor densidad potencial de influencia.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section analytics-grid compact-analytics">
+      <div class="card chart-card compact-chart-card">
+        <h3>📌 Influencia por objetivo</h3>
+        <p class="explain">Dónde se concentra la gestión ponderada.</p>
+        <div class="chart-box compact-chart-box"><canvas id="objScoreChart"></canvas></div>
+      </div>
+      <div class="card chart-card compact-chart-card">
+        <h3>🗺️ Influencia por tema</h3>
+        <p class="explain">Qué temas acumulan mayor densidad de gestión.</p>
+        <div class="chart-box compact-chart-box"><canvas id="themeChart"></canvas></div>
+      </div>
+      <div class="card chart-card compact-chart-card">
+        <h3>🔥 Impacto declarado</h3>
+        <p class="explain">Calidad de foco: alto, medio o bajo impacto.</p>
+        <div class="chart-box compact-chart-box"><canvas id="impactChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card alerts-card horizontal-alerts-card">
+        <div class="alerts-headline">
+          <div>
+            <h3>🚨 Alertas de gestión</h3>
+            <p class="explain">Banda de control para anticipar brechas, falta de datos y decisiones necesarias del próximo ciclo.</p>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <h3>📌 Influencia por objetivo</h3>
-        <p class="explain">Este cuadro muestra dónde se concentra la gestión ponderada. Ayuda a distinguir objetivos con mucho volumen operativo de aquellos que efectivamente acumulan acciones de mayor impacto.</p>
-        <div class="chart-box"><canvas id="objScoreChart"></canvas></div>
+        <div class="alerts-grid horizontal-alerts-grid" id="alertsGrid"></div>
       </div>
     </section>
 
-    <section class="section grid-2">
-      <div class="card alerts-card">
-        <h3>🚨 Alertas de gestión</h3>
-        <p class="explain">Las alertas combinan brechas de proyección, ausencia de datos y señales cualitativas. Su función es orientar conversación y priorización, no evaluar a la agencia ni asignar responsabilidades individuales.</p>
-        <div class="alerts-grid" id="alertsGrid"></div>
-      </div>
-      <div class="grid-3" style="grid-template-columns:1fr; gap:18px;">
-        <div class="card">
-          <h3>🚦 Estado de gestión</h3>
-          <p class="explain">Permite leer la madurez de la cartera de hitos: cuánto está ejecutado, cuánto sigue en preparación y dónde puede haber cuello de botella.</p>
-          <div class="chart-box" style="height:230px;"><canvas id="statusChart"></canvas></div>
-        </div>
-        <div class="card">
-          <h3>🔥 Impacto declarado</h3>
-          <p class="explain">Sirve para mirar calidad de foco. Si la mayoría de los hitos son de bajo impacto, el dashboard debería disparar una conversación sobre priorización de actores y temas.</p>
-          <div class="chart-box" style="height:230px;"><canvas id="impactChart"></canvas></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section grid-2">
-      <div class="card">
-        <h3>🗺️ Influencia por tema</h3>
-        <p class="explain">Este gráfico cruza temática con índice de influencia. Es útil para verificar si el esfuerzo se concentra en los temas prioritarios de la matriz de desregulación o si hay dispersión.</p>
-        <div class="chart-box"><canvas id="themeChart"></canvas></div>
-      </div>
-      <div class="card">
-        <h3>🧠 Cómo interpretar este dashboard</h3>
-        <p class="explain">La lectura recomendada es secuencial: primero revisar si los KR están en ritmo; después mirar alertas; luego usar índice de influencia para priorizar actores y temas. La tabla final sirve para auditar cada hito y entender qué explica los números.</p>
-        <div class="score-grid">
-          <div class="score-item"><strong>1. Cumplimiento</strong><div>¿El acumulado y el proyectado alcanzan el target?</div></div>
-          <div class="score-item"><strong>2. Calidad</strong><div>¿Los hitos tienen impacto alto o son mayormente periféricos?</div></div>
-          <div class="score-item"><strong>3. Foco</strong><div>¿Los temas trabajados coinciden con la matriz de desregulación?</div></div>
-          <div class="score-item"><strong>4. Decisión</strong><div>¿Qué hay que acelerar, corregir o cargar mejor antes del próximo corte?</div></div>
+    <section class="section">
+      <div class="card guide-compact-card">
+        <h3>🧠 Cómo leer el tablero</h3>
+        <div class="guide-steps">
+          <div class="score-item"><strong>1. Cumplimiento</strong><div>Mirar actual vs target anual.</div></div>
+          <div class="score-item"><strong>2. Ritmo</strong><div>Usar la proyección solo como alerta secundaria.</div></div>
+          <div class="score-item"><strong>3. Calidad</strong><div>Ver influencia, tema e impacto declarado.</div></div>
+          <div class="score-item"><strong>4. Decisión</strong><div>Definir qué acelerar, corregir o cargar mejor.</div></div>
         </div>
       </div>
     </section>
@@ -277,17 +1007,17 @@
       </div>
     </section>
 
-    <div class="footer">Dashboard AAPP26 · Datos base: Excel provisto por el área + views Santander POST informadas manualmente · Proyección anual calculada sobre mes 4.</div>
+    <div class="footer">Dashboard AAPP26 · Datos base: Excel provisto por el área + views Santander POST informadas manualmente · Comparación principal: target anual · Proyección referencial sobre mes 5.</div>
   </div>
 
   <script>
-    const rows = [{"fecha": "11/05/2026", "actor": "WHITE PAPER", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)", "tipo": "Contenido/Posicionamiento", "estado": "Planificado", "impacto": "Medio", "tema": "FAL", "points": 0.6}, {"fecha": "05/05/2026", "actor": "Jorge Liotti", "cargo": "Periodista", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Gestionar 6 relacionamientos del EXCO con figuras políticas/funcionarios.", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Panorama Político", "points": 1.0}, {"fecha": "30/04/2026", "actor": "Daiana Molero", "cargo": "Diputada Nacional (PRO)", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Alianza con Cámaras y Asoc. en la gestión de temas de MdD (2/3)", "tipo": "Evento/Activación", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Comisión AA.PP", "points": 1.0}, {"fecha": "22/04/2026", "actor": "Fernando De Andreis", "cargo": "Diputado Nacional (PRO)", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 1.0}, {"fecha": "09/04/2026", "actor": "Marina Ongaro", "cargo": "Subgerente Gral BCRA", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Alto", "tema": "GIRE. Actividades complementarias", "points": 3.0}, {"fecha": "09/04/2026", "actor": "Leandro Cifelli", "cargo": "Secretario de Cultura", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Gestionar 6 relacionamientos del EXCO con figuras políticas/funcionarios.", "tipo": "Evento/Activación", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Inauguración Fundación", "points": 1.0}, {"fecha": "26/03/2026", "actor": "Federico Susbielles", "cargo": "Intendente Bahía Blanca", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "12/03/2026", "actor": "Pablo Javkin", "cargo": "Intendente Rosario", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "03/03/2026", "actor": "Patricia Vasquez", "cargo": "Diputada Nacional (LLA)", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "TSH", "points": 1.0}, {"fecha": "20/02/2026", "actor": "Sergio Guenaga", "cargo": "Gerente General CECRA", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Alianza con Cámaras y Asoc. en la gestión de temas de MdD (2/3)", "tipo": "Alianza/Articulación", "estado": "En Gestión", "impacto": "Medio", "tema": "Comisión AA.PP", "points": 1.2}, {"fecha": "14/02/2026", "actor": "Agustín Neme", "cargo": "Intendente Gral Pueyrredón", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "29/01/2026", "actor": "Santiago Santurio", "cargo": "Diputado Nacional", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "28/01/2026", "actor": "NON PAPER", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj1", "kr": "Distribución de non papers a SH sobre temas de impacto en la MdD (3/5)", "tipo": "Documento Técnico", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "28/01/2026", "actor": "Eduardo Vischi", "cargo": "Senador Nacional", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 1.0}, {"fecha": "28/01/2026", "actor": "PRENSA", "cargo": "N/A", "objetivo_original": "Cross Colaboration Area", "objetivo_dashboard": "Obj4", "kr": "Cross colaboration con prensa en (2/4) temas de MdD", "tipo": "Alianza/Articulación", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "27/01/2026", "actor": "WHITE PAPER", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)", "tipo": "Contenido/Posicionamiento", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "21/01/2026", "actor": "Josefina Tajes", "cargo": "Asesora Senado", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Alto", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 3.0}];
-    const krCards = [{"objective_key": "Obj1", "objective_title": "1) Agenda de desregulación local", "objective_subtitle": "TSH, Fintech, Data, Payments", "items": [{"label": "KR1 Reuniones con impacto directo", "current": 8, "target": 12, "note": "Base: registros del archivo", "pct": 66.7, "display": "8/12", "projected": 24.0, "projected_pct": 200.0}, {"label": "KR2 Non papers a stakeholders", "current": 1, "target": 5, "note": "Incluye NON PAPER cargado", "pct": 20.0, "display": "1/5", "projected": 3.0, "projected_pct": 60.0}]}, {"objective_key": "Obj2", "objective_title": "2) Relacionamientos & Investor's Trips", "objective_subtitle": "Gestión, coordinación y concreción", "items": [{"label": "KR1 Relacionamientos EXCO con figuras políticas/funcionarios", "current": 4, "target": 6, "note": "Sin duplicar relacionamientos", "pct": 66.7, "display": "4/6", "projected": 12.0, "projected_pct": 200.0}, {"label": "KR2 Satisfacción en Inversores/Clientes", "current": null, "target": 80, "note": "Sin dato en la base actual", "suffix": "%", "display": "Sin dato", "pct": null, "projected": null, "projected_pct": null}]}, {"objective_key": "Obj3", "objective_title": "3) Advocacy", "objective_subtitle": "Contenido, posicionamiento y alianzas", "items": [{"label": "KR1 Vistas al Blog Corporativo Santander POST", "current": 84000, "target": 300000, "note": "Dato informado: 84.000 vistas al cierre del mes 4", "pct": 28.0, "display": "84.000/300.000", "projected": 252000.0, "projected_pct": 84.0}, {"label": "KR2 White papers sobre desregulación/negocio", "current": 2, "target": 5, "note": "WHITE PAPER cargados", "pct": 40.0, "display": "2/5", "projected": 6.0, "projected_pct": 120.0}, {"label": "KR3 Alianza con cámaras y asociaciones", "current": 1, "target": 3, "note": "Base: CECRA", "pct": 33.3, "display": "1/3", "projected": 3.0, "projected_pct": 100.0}]}, {"objective_key": "Obj4", "objective_title": "4) Cross Colaboration Área", "objective_subtitle": "Prensa y temas de matriz de desregulación", "items": [{"label": "KR1 Colaboraciones con prensa", "current": 1, "target": 4, "note": "Base: PRENSA", "pct": 25.0, "display": "1/4", "projected": 3.0, "projected_pct": 75.0}]}, {"objective_key": "Obj5", "objective_title": "5) Seguimiento Pentágonos", "objective_subtitle": "Coordinación con actores clave", "items": [{"label": "KR1 Reuniones con actores claves", "current": 0, "target": 5, "note": "Sin hitos cargados en el archivo", "pct": 0.0, "display": "0/5", "projected": 0.0, "projected_pct": 0.0}]}];
-    const summary = {"total_hitos": 17, "ejecutados": 15, "exec_pct": 88.2, "influence_total": 27.8, "kr_with_data": 8, "kr_on_track": 4, "kr_risk": 4, "month_cutoff": 4, "year_months": 12, "blog_current": 84000, "blog_projected": 252000};
-    const alerts = [{"severity": "warning", "icon": "📝", "title": "Non papers con brecha de cadencia", "detail": "Proyectado: 3 vs target 5; faltaría ritmo equivalente a 2 entregas.", "action": "Priorizar temas MdD con mayor capacidad de abrir conversación regulatoria."}, {"severity": "data", "icon": "🧭", "title": "Satisfacción sin dato cargado", "detail": "El KR de satisfacción todavía no tiene base cuantitativa, por lo que no puede proyectarse ni compararse contra target.", "action": "Definir fuente y frecuencia de captura antes de la próxima actualización."}, {"severity": "warning", "icon": "📉", "title": "Blog por debajo del ritmo anual", "detail": "Proyectado: 252.000 vs target 300.000; brecha estimada 48.000 vistas.", "action": "Acelerar agenda de contenidos, distribución orgánica y amplificación desde canales propios."}, {"severity": "warning", "icon": "🗞️", "title": "Cross con Prensa debajo del target", "detail": "Proyectado: 3 vs target 4; brecha estimada 1 colaboración.", "action": "Convertir temas MdD en oportunidades de posicionamiento público o técnico."}, {"severity": "critical", "icon": "🔴", "title": "Seguimiento Pentágonos sin avance visible", "detail": "Proyectado: 0 vs target 5; no hay hitos cargados en la base actual.", "action": "Validar si es falta de carga, falta de gestión o si el objetivo requiere redefinir actores prioritarios."}, {"severity": "insight", "icon": "🎯", "title": "Baja proporción de hitos de impacto alto", "detail": "Solo 2 de 17 hitos están clasificados como impacto alto (12%).", "action": "Usar el índice de influencia para priorizar actores/temas con mayor capacidad de mover agenda."}];
+    const rows = [{"fecha": "29/05/2026", "actor": "POST", "cargo": "n/a", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)", "tipo": "Contenido/Posicionamiento", "estado": "Ejecutado", "impacto": "Medio", "tema": "MORA", "points": 2.0}, {"fecha": "28/05/2026", "actor": "Pablo Juliano", "cargo": "Diputado Nacional", "objetivo_original": "Seguimiento Pentágonos Public Policy (Go2model)", "objetivo_dashboard": "Obj5", "kr": "Asegurar 5 reuniones con actores clave con impacto en temas de seguimiento global", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "MORA", "points": 2.0}, {"fecha": "26/05/2026", "actor": "Mariela Coletta", "cargo": "Diputada Nacional (UCR)", "objetivo_original": "Seguimiento Pentágonos Public Policy (Go2model)", "objetivo_dashboard": "Obj5", "kr": "Asegurar 5 reuniones con actores clave con impacto en temas de seguimiento global", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "MORA", "points": 2.0}, {"fecha": "13/05/2026", "actor": "POST", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)", "tipo": "Contenido/Posicionamiento", "estado": "Planificado", "impacto": "Medio", "tema": "FAL", "points": 0.6}, {"fecha": "05/05/2026", "actor": "Jorge Liotti", "cargo": "Periodista", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Gestionar 6 relacionamientos del EXCO con figuras políticas/funcionarios.", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Panorama Político", "points": 1.0}, {"fecha": "30/04/2026", "actor": "Daiana Molero", "cargo": "Diputada Nacional (PRO)", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Alianza con Cámaras y Asoc. en la gestión de temas de MdD (2/3)", "tipo": "Evento/Activación", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Comisión AA.PP", "points": 1.0}, {"fecha": "22/04/2026", "actor": "Fernando De Andreis", "cargo": "Diputado Nacional (PRO)", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 1.0}, {"fecha": "09/04/2026", "actor": "Marina Ongaro", "cargo": "Subgerente Gral BCRA", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Alto", "tema": "GIRE. Actividades complementarias", "points": 3.0}, {"fecha": "09/04/2026", "actor": "Leandro Cifelli", "cargo": "Secretario de Cultura", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Gestionar 6 relacionamientos del EXCO con figuras políticas/funcionarios.", "tipo": "Evento/Activación", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Inauguración Fundación", "points": 1.0}, {"fecha": "26/03/2026", "actor": "Federico Susbielles", "cargo": "Intendente Bahía Blanca", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "12/03/2026", "actor": "Pablo Javkin", "cargo": "Intendente Rosario", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "03/03/2026", "actor": "Patricia Vasquez", "cargo": "Diputada Nacional (LLA)", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "TSH", "points": 1.0}, {"fecha": "20/02/2026", "actor": "Sergio Guenaga", "cargo": "Gerente General CECRA", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Alianza con Cámaras y Asoc. en la gestión de temas de MdD (2/3)", "tipo": "Alianza/Articulación", "estado": "En Gestión", "impacto": "Medio", "tema": "Comisión AA.PP", "points": 1.2}, {"fecha": "14/02/2026", "actor": "Agustín Neme", "cargo": "Intendente Gral Pueyrredón", "objetivo_original": "Relacionamientos & Investor´s Trips", "objetivo_dashboard": "Obj2", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "TSH", "points": 2.0}, {"fecha": "29/01/2026", "actor": "Santiago Santurio", "cargo": "Diputado Nacional", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "28/01/2026", "actor": "NON PAPER", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj1", "kr": "Distribución de non papers a SH sobre temas de impacto en la MdD (3/5)", "tipo": "Documento Técnico", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "28/01/2026", "actor": "Eduardo Vischi", "cargo": "Senador Nacional", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Bajo", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 1.0}, {"fecha": "28/01/2026", "actor": "PRENSA", "cargo": "N/A", "objetivo_original": "Cross Colaboration Área", "objetivo_dashboard": "Obj4", "kr": "Cross colaboration con prensa en (2/4) temas de MdD", "tipo": "Alianza/Articulación", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "27/01/2026", "actor": "POST", "cargo": "N/A", "objetivo_original": "Advocacy", "objetivo_dashboard": "Obj3", "kr": "Realizar 3/5 white papers sobre temas de desregulación/negocio (guest posting)", "tipo": "Contenido/Posicionamiento", "estado": "Ejecutado", "impacto": "Medio", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 2.0}, {"fecha": "21/01/2026", "actor": "Josefina Tajes", "cargo": "Asesora Senado", "objetivo_original": "Agenda de desregulación local (TSH, Fintech, Data, Payments)", "objetivo_dashboard": "Obj1", "kr": "Cantidad de reuniones con impacto directo en Matriz de desregulación (MdR) (10/12) (TSH 50%)", "tipo": "Reunión Institucional", "estado": "Ejecutado", "impacto": "Alto", "tema": "Reforma Laboral. Art 35. Sueldos en CVU", "points": 3.0}];
+    const krCards = [{"objective_key": "Obj1", "objective_title": "1) Agenda de desregulación local", "objective_subtitle": "TSH, Fintech, Data, Payments", "items": [{"label": "KR1 Reuniones con impacto directo", "current": 10, "target": 12, "note": "Avance informado en el KR del archivo", "pct": 83.3, "display": "10/12", "projected": 24.0, "projected_pct": 200.0}, {"label": "KR2 Non papers a stakeholders", "current": 3, "target": 5, "note": "Avance informado en el KR del archivo", "pct": 60.0, "display": "3/5", "projected": 7.2, "projected_pct": 144.0}]}, {"objective_key": "Obj2", "objective_title": "2) Relacionamientos & Investor's Trips", "objective_subtitle": "Gestión, coordinación y concreción", "items": [{"label": "KR1 Relacionamientos EXCO con figuras políticas/funcionarios", "current": 4, "target": 6, "note": "Base: hitos imputados al objetivo", "pct": 66.7, "display": "4/6", "projected": 9.6, "projected_pct": 160.0}, {"label": "KR2 Satisfacción en Inversores/Clientes", "current": 100, "target": 80, "note": "Dato informado: satisfacción 100% al cierre del mes 5", "suffix": "%", "pct": 125.0, "display": "100%/80%", "projected": 100, "projected_pct": 125.0}]}, {"objective_key": "Obj3", "objective_title": "3) Advocacy", "objective_subtitle": "Contenido, posicionamiento y alianzas", "items": [{"label": "KR1 Vistas al Blog Corporativo Santander POST", "current": 84000, "target": 300000, "note": "Dato informado: 84.000 vistas al cierre del mes 5", "pct": 28.0, "display": "84.000/300.000", "projected": 201600.0, "projected_pct": 67.2}, {"label": "KR2 White papers sobre desregulación/negocio", "current": 3, "target": 5, "note": "Avance informado en el KR del archivo", "pct": 60.0, "display": "3/5", "projected": 7.2, "projected_pct": 144.0}, {"label": "KR3 Alianza con cámaras y asociaciones", "current": 2, "target": 3, "note": "Avance informado en el KR del archivo", "pct": 66.7, "display": "2/3", "projected": 4.8, "projected_pct": 160.0}]}, {"objective_key": "Obj4", "objective_title": "4) Cross Colaboration Área", "objective_subtitle": "Prensa y temas de matriz de desregulación", "items": [{"label": "KR1 Colaboraciones con prensa", "current": 2, "target": 4, "note": "Avance informado en el KR del archivo", "pct": 50.0, "display": "2/4", "projected": 4.8, "projected_pct": 120.0}]}, {"objective_key": "Obj5", "objective_title": "5) Seguimiento Pentágonos", "objective_subtitle": "Coordinación con actores clave", "items": [{"label": "KR1 Reuniones con actores claves", "current": 2, "target": 5, "note": "Base: hitos cargados en el archivo", "pct": 40.0, "display": "2/5", "projected": 4.8, "projected_pct": 96.0}]}];
+    const summary = {"total_hitos": 20, "ejecutados": 18, "exec_pct": 90.0, "influence_total": 33.8, "kr_with_data": 9, "kr_on_track": 7, "kr_risk": 2, "month_cutoff": 5, "year_months": 12, "blog_current": 84000, "blog_projected": 201600.0};
+    const alerts = [{"severity": "insight", "icon": "✅", "title": "Satisfacción sobre target", "detail": "El KR de Inversores/Clientes está en 100% contra un target anual de 80%.", "action": "Mantener la captura del dato en cada actividad para sostener trazabilidad y consistencia."}, {"severity": "warning", "icon": "📉", "title": "Blog por debajo del ritmo anual", "detail": "Proyectado: 201.600 vs target 300.000; brecha estimada 98.400 vistas.", "action": "Acelerar agenda de contenidos, distribución orgánica y amplificación desde canales propios."}, {"severity": "warning", "icon": "🧩", "title": "Pentágonos cerca del ritmo, pero aun debajo del target", "detail": "Actual: 2/5; proyectado: 4.8 vs target 5.", "action": "Asegurar próximos actores clave y revisar si algun hito existente debe etiquetarse tambien como Pentagono."}, {"severity": "insight", "icon": "🎯", "title": "Baja proporcion de hitos de impacto alto", "detail": "Solo 2 de 20 hitos están clasificados como impacto alto (10%).", "action": "Usar el índice de influencia para priorizar actores/temas con mayor capacidad de mover agenda."}];
     const objectiveExplanations = {"Obj1": "Permite ver si la agenda de desregulación mantiene una cadencia suficiente de reuniones y documentos técnicos. El valor principal es anticipar brechas de gestión, aunque el resultado regulatorio dependa de voluntad política.", "Obj2": "Ordena los relacionamientos concretados y ayuda a leer si existe una frecuencia razonable de acceso institucional para EXCO, inversores y clientes estratégicos.", "Obj3": "Mide la capacidad de instalar agenda desde contenidos, publicaciones y articulación sectorial. El proyectado ayuda a distinguir volumen sostenible de acciones aisladas.", "Obj4": "Muestra si los temas de matriz de desregulación están siendo convertidos en oportunidades de posicionamiento junto con Prensa.", "Obj5": "Funciona como control temprano de seguimiento con actores clave. Si no hay carga o avance, el dashboard lo debe hacer visible rápido."};
-    const chartData = {"objLabels": ["Agenda de desregulación local", "Relacionamientos & Investor's Trips", "Advocacy", "Cross Colaboration Área"], "objValues": [17.0, 5.0, 3.8, 2.0], "statusLabels": ["Ejecutado", "En Gestión", "Planificado"], "statusValues": [15, 1, 1], "impactLabels": ["Alto", "Medio", "Bajo"], "impactValues": [2, 9, 6], "themeLabels": ["Reforma Laboral. Art 35. Sueldos en CVU", "TSH", "GIRE. Actividades complementarias", "Comisión AA.PP", "Panorama Político", "Inauguración Fundación", "FAL"], "themeValues": [13.0, 7.0, 3.0, 2.2, 1.0, 1.0, 0.6]};
-    const MONTH_CUTOFF = 4;
+    const chartData = {"objLabels": ["Agenda de desregulación local", "Relacionamientos & Investor's Trips", "Advocacy", "Cross Colaboration Área", "Seguimiento Pentágonos"], "objValues": [17.0, 5.0, 5.8, 2.0, 4.0], "statusLabels": [], "statusValues": [], "impactLabels": ["Alto", "Medio", "Bajo"], "impactValues": [2, 12, 6], "themeLabels": ["Reforma Laboral. Art 35. Sueldos en CVU", "TSH", "MORA", "GIRE. Actividades complementarias", "Comisión AA.PP", "Panorama Político", "Inauguración Fundación", "FAL"], "themeValues": [13.0, 7.0, 6.0, 3.0, 2.2, 1.0, 1.0, 0.6]};
+    const MONTH_CUTOFF = 5;
     const YEAR_MONTHS = 12;
 
     const fmt = (n, suffix = '') => {
@@ -301,6 +1031,14 @@
       return Math.round((Number(cur) / Number(tgt)) * 1000) / 10;
     };
     const cap = v => Math.max(0, Math.min(100, v));
+
+    const escHtml = (str = '') => String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+    const escAttr = escHtml;
 
     function pillClassByStatus(s) {
       if (s === 'Ejecutado' || s === 'Con Impacto') return 'exec';
@@ -327,10 +1065,15 @@
       return {label:'Requiere foco', cls:'risk', icon:'!'};
     }
     function krInterpretation(item) {
-      if (item.projected === null || item.projected === undefined) return 'No se puede proyectar: falta dato cuantitativo o fuente definida.';
-      const proj = Number(item.projected), target = Number(item.target);
-      if (proj >= target) return `Al ritmo del mes 4, el KR llegaría a ${fmt(proj, item.suffix || '')}, por encima del target de ${fmt(target, item.suffix || '')}.`;
-      return `Al ritmo del mes 4, el KR cerraría en ${fmt(proj, item.suffix || '')}, por debajo del target de ${fmt(target, item.suffix || '')}.`;
+      if (item.projected === null || item.projected === undefined) return 'Lectura: todavía falta una fuente cuantitativa para comparar este KR contra su target anual.';
+      const proj = Number(item.projected), target = Number(item.target), current = Number(item.current || 0);
+      const currentPct = pct(current, target);
+      if ((item.suffix || '') === '%') {
+        if (current >= target) return `Lectura: el indicador está en ${fmt(current, '%')} y supera el target anual de ${fmt(target, '%')}. En indicadores porcentuales no se anualiza el dato; se monitorea su sostenibilidad.`;
+        return `Lectura: el indicador está en ${fmt(current, '%')} frente a un target anual de ${fmt(target, '%')}; requiere foco para recuperar nivel.`;
+      }
+      if (proj >= target) return `Lectura: el avance actual equivale al ${fmt(currentPct, '%')} del target anual y, si se sostiene el ritmo, el KR llegaría al objetivo.`;
+      return `Lectura: el avance actual equivale al ${fmt(currentPct, '%')} del target anual; el ritmo estimado queda por debajo del objetivo y requiere foco de gestión.`;
     }
 
     function renderKPIs() {
@@ -345,18 +1088,21 @@
       el.innerHTML = '';
       krCards.forEach(card => {
         const count = rows.filter(r => r.objetivo_dashboard === card.objective_key).length;
+        const explanation = objectiveExplanations[card.objective_key] || 'Este bloque muestra avance actual, target anual y ritmo proyectado como dato secundario.';
         const div = document.createElement('div');
         div.className = 'objective';
         div.innerHTML = `
           <div class="objective-head">
-            <div>
-              <h3 class="objective-title">${card.objective_title}</h3>
-              <div class="objective-sub">${card.objective_subtitle} · ${count} hitos en la base</div>
-              <div class="objective-exp"><span>💡</span><span>${objectiveExplanations[card.objective_key] || 'Este bloque muestra avance actual, target y ritmo proyectado.'}</span></div>
+            <div class="objective-title-row">
+              <div>
+                <h3 class="objective-title">${card.objective_title}</h3>
+                <div class="objective-sub">${card.objective_subtitle} · ${count} hitos</div>
+              </div>
+              <div class="badge">${card.objective_key}</div>
             </div>
-            <div class="badge">${card.objective_key}</div>
+            <div class="objective-exp" tabindex="0" title="${escAttr(explanation)}" data-full="${escAttr(explanation)}"><span>💡</span><span class="exp-text">${escHtml(explanation)}</span></div>
           </div>
-          <div class="rows-grid">
+          <div class="rows-grid compact-kr-list">
             ${card.items.map(item => {
               const st = krStatus(item);
               const current = item.current;
@@ -366,35 +1112,52 @@
               const currentPct = pct(current, target);
               const projectedPct = pct(projected, target);
               const actualWidth = currentPct === null ? 0 : cap(currentPct);
-              const projWidth = projectedPct === null ? 0 : cap(projectedPct);
+              const projLeft = projectedPct === null ? null : cap(projectedPct);
+              const currentLabel = current === null || current === undefined ? 'Sin dato' : fmt(current, suffix);
+              const projectedLabel = projected === null || projected === undefined ? 'Sin dato' : fmt(projected, suffix);
+              const currentPctLabel = currentPct === null ? 's/d' : fmt(currentPct, '%');
+              const projectedPctLabel = projectedPct === null ? 's/d' : fmt(projectedPct, '%');
               return `
-                <div class="kr">
-                  <div>
-                    <div class="kr-top">
-                      <div>
-                        <div class="kr-label">${item.label}</div>
-                        <div class="kr-meta">${item.note}</div>
-                      </div>
-                      <span class="status-chip ${st.cls}">${st.icon} ${st.label}</span>
+                <div class="kr compact-kr">
+                  <div class="kr-main-line">
+                    <div>
+                      <div class="kr-label">${item.label}</div>
+                      <div class="kr-meta">${item.note}</div>
                     </div>
-                    <div class="metric-row">
-                      <div class="metric-box"><strong>${current === null || current === undefined ? 'Sin dato' : fmt(current, suffix)}</strong><span>Actual M4</span></div>
-                      <div class="metric-box"><strong>${projected === null || projected === undefined ? 'Sin dato' : fmt(projected, suffix)}</strong><span>Proyectado anual</span></div>
-                    </div>
-                    <div class="target-row"><span>Target anual</span><strong>${fmt(target, suffix)}</strong></div>
-                    <div class="bar-area">
-                      <div>
-                        <div class="bar-label"><span>Actual</span><span>${currentPct === null ? 's/d' : fmt(currentPct, '%')}</span></div>
-                        <div class="progress"><div class="bar ${current === null || current === undefined ? 'gray' : ''}" style="width:${current === null || current === undefined ? 10 : Math.max(3, actualWidth)}%"></div></div>
-                      </div>
-                      <div>
-                        <div class="bar-label"><span>Proyectado</span><span>${projectedPct === null ? 's/d' : fmt(projectedPct, '%')}</span></div>
-                        <div class="progress"><div class="projected-bar ${projected === null || projected === undefined ? 'gray' : ''}" style="width:${projected === null || projected === undefined ? 10 : Math.max(3, projWidth)}%"></div></div>
-                      </div>
-                    </div>
-                    <div class="legend"><span><i class="dot"></i> Actual</span><span><i class="dot proj"></i> Proyectado</span><span><i class="dot target"></i> Target = 100%</span></div>
+                    <span class="status-chip ${st.cls}">${st.icon} ${st.label}</span>
                   </div>
-                  <div class="kr-interpret">${krInterpretation(item)}</div>
+
+                  <div class="compact-metrics">
+                    <div class="compact-metric target">
+                      <span>Target</span>
+                      <strong>${fmt(target, suffix)}</strong>
+                      <em>Anual</em>
+                    </div>
+                    <div class="compact-metric">
+                      <span>Actual M${MONTH_CUTOFF}</span>
+                      <strong>${currentLabel}</strong>
+                      <em>${currentPctLabel}</em>
+                    </div>
+                    <div class="compact-metric projected">
+                      <span>Proy.</span>
+                      <strong>${projectedLabel}</strong>
+                      <em>${projectedPctLabel}</em>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="compact-progress-head"><span>Avance vs target anual</span></div>
+                    <div class="progress clean-track">
+                      <div class="bar ${current === null || current === undefined ? 'gray' : ''}" style="width:${current === null || current === undefined ? 8 : Math.max(3, actualWidth)}%"></div>
+                      ${projLeft === null ? '' : `<span class="projection-marker" style="left:${projLeft}%" title="Proyección referencial: ${projectedLabel}"></span>`}
+                    </div>
+                    <div class="compact-proj-note">
+                      <span>Marca punteada: proyección</span>
+                      <span>Target = <b>100%</b></span>
+                    </div>
+                  </div>
+
+                  <div class="kr-interpret compact-line"><span>↳</span><span>${krInterpretation(item)}</span></div>
                 </div>`;
             }).join('')}
           </div>`;
@@ -519,7 +1282,6 @@
       indexAxis: 'y',
       scales: { x: { beginAtZero: true, grid: { color: '#eef2f7' } }, y: { grid: { display: false } } }
     });
-    mkChart('statusChart', 'doughnut', chartData.statusLabels, chartData.statusValues, { cutout: '66%' });
     mkChart('impactChart', 'bar', chartData.impactLabels, chartData.impactValues, {
       indexAxis: 'y',
       scales: { x: { beginAtZero: true, grid: { color: '#eef2f7' }, ticks: { precision: 0 } }, y: { grid: { display: false } } }
